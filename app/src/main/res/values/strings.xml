@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">PayRoll</string>
+    <string name="pay">Pay goes here…</string>
+    <string name="weekpay">Weekly Pay</string>
+    <string name="pay_rate">Pay Rate</string>
+    <string name="hours">Hours</string>
+    <string name="name_pay">Please Enter Hours Worked and Pay Rate</string>
+    <string name="employee_name">Employee Name: </string>
+    <string name="name_ph">Name</string>
+    <string name="date">Select Date</string>
+    <string name="time">Select Time</string>
 </resources>

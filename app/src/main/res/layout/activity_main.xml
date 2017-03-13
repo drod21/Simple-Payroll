@@ -17,13 +17,12 @@
         android:id="@+id/in_date"
         android:layout_marginTop="82dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="SELECT DATE"
+        android:text="@string/date"
         android:id="@+id/btn_date"
         android:layout_alignBottom="@+id/in_date"
         android:layout_toRightOf="@+id/in_date"
@@ -34,13 +33,12 @@
         android:layout_height="wrap_content"
         android:id="@+id/in_time"
         android:layout_below="@+id/in_date"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="SELECT TIME"
+        android:text="@string/time"
         android:id="@+id/btn_time"
         android:layout_below="@+id/btn_date"
         android:layout_alignLeft="@+id/btn_date"
@@ -49,7 +47,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Please Enter Employee Name"
+        android:text="@string/employee_name"
         android:textSize="18sp"
         android:id="@+id/name" />
 
@@ -57,7 +55,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:text="@string/name_ph"
         android:ems="10"
         android:layout_below="@+id/name"
         android:layout_alignEnd="@+id/name"
@@ -65,7 +63,7 @@
         android:id="@+id/empName" />
 
     <TextView
-        android:text="Please Enter Hours Worked and Pay Rate"
+        android:text="@string/name_pay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="21dp"
@@ -79,7 +77,7 @@
         android:ems="10"
         android:id="@+id/hours"
         android:layout_width="wrap_content"
-        android:text="Hours"
+        android:text="@string/hours"
         android:layout_below="@+id/textView2"
         android:layout_alignParentStart="true"
         android:inputType="text" />
@@ -88,7 +86,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:text="Pay Rate"
+        android:text="@string/pay_rate"
         android:ems="10"
         android:layout_below="@+id/hours"
         android:layout_alignEnd="@+id/hours"
@@ -97,7 +95,7 @@
         android:id="@+id/payRate" />
 
     <Button
-        android:text="Weekly Pay"
+        android:text="@string/weekpay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -105,6 +103,17 @@
         android:layout_alignEnd="@+id/payRate"
         android:id="@+id/weekPay"
         android:onClick="pay" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:id="@+id/pay"
+        android:textSize="20sp"
+        android:text="@string/pay"
+        android:layout_below="@+id/weekPay"
+        android:layout_alignEnd="@+id/hours" />
+
 
     <!-- <Button
         android:id="@+id/set_button"
@@ -116,15 +125,6 @@
         android:onClick="setTime"
         android:text="@string/time_save" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:id="@+id/pay"
-        android:textSize="20sp"
-        android:text="Pay Goes Here"
-        android:layout_below="@+id/weekPay"
-        android:layout_alignEnd="@+id/hours" />
 
     <TextView
         android:id="@+id/timepick"
