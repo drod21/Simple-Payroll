@@ -11,39 +11,6 @@
     tools:context="com.drod2169.payroll.MainActivity">
 
 
-    <EditText
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/in_date"
-        android:layout_marginTop="82dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/date"
-        android:id="@+id/btn_date"
-        android:layout_alignBottom="@+id/in_date"
-        android:layout_toRightOf="@+id/in_date"
-        android:layout_toEndOf="@+id/in_date" />
-
-    <EditText
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/in_time"
-        android:layout_below="@+id/in_date"
-        android:layout_alignParentStart="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/time"
-        android:id="@+id/btn_time"
-        android:layout_below="@+id/btn_date"
-        android:layout_alignLeft="@+id/btn_date"
-        android:layout_alignStart="@+id/btn_date" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -73,14 +40,21 @@
         android:layout_alignParentStart="true" />
 
     <EditText
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
+        android:id="@+id/hours_worked"
+        android:text="@string/hours"
+        android:layout_below="@+id/hours"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_height="wrap_content"
         android:id="@+id/hours"
         android:layout_width="wrap_content"
         android:text="@string/hours"
         android:layout_below="@+id/textView2"
         android:layout_alignParentStart="true"
-        android:inputType="text" />
+        android:onClick="hours" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -88,9 +62,7 @@
         android:inputType="text"
         android:text="@string/pay_rate"
         android:ems="10"
-        android:layout_below="@+id/hours"
-        android:layout_alignEnd="@+id/hours"
-        android:layout_marginEnd="11dp"
+        android:layout_below="@+id/hours_worked"
         android:layout_marginTop="12dp"
         android:id="@+id/payRate" />
 
@@ -98,9 +70,8 @@
         android:text="@string/weekpay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/payRate"
         android:layout_centerVertical="true"
-        android:layout_alignEnd="@+id/payRate"
         android:id="@+id/weekPay"
         android:onClick="pay" />
 
@@ -113,55 +84,5 @@
         android:text="@string/pay"
         android:layout_below="@+id/weekPay"
         android:layout_alignEnd="@+id/hours" />
-
-
-    <!-- <Button
-        android:id="@+id/set_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="180dp"
-        android:onClick="setTime"
-        android:text="@string/time_save" />
-
-
-    <TextView
-        android:id="@+id/timepick"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/timepicker"
-        android:layout_centerHorizontal="true"
-        android:text="@string/time_pick"
-        />
-
-    <TextView
-        android:id="@+id/timecurrent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/timepicker"
-        android:layout_alignTop="@+id/set_button"
-        android:layout_marginTop="67dp"
-        android:text="@string/time_current"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-
-    <TextView
-        android:id="@+id/timeselected"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/timecurrent"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
-        android:text="@string/time_selected"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TimePicker
-        android:id="@+id/timepicker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/hours"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="24dp" /> -->
 
 </RelativeLayout>

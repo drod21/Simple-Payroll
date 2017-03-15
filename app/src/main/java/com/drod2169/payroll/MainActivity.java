@@ -1,7 +1,7 @@
 package com.drod2169.payroll;
 
 
-import android.app.DialogFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -9,12 +9,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity {
 
 
     Button btnDatePicker, btnTimePicker;
     EditText txtDate, txtTime;
-    private int mHour, mMinute;
 
 
     public void pay(View view) {
@@ -24,14 +23,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Double totalPay;
 
         EditText name = (EditText) findViewById(R.id.empName);
-        EditText hours = (EditText) findViewById(R.id.hours);
         EditText payRate = (EditText) findViewById(R.id.payRate);
+
 
         String empName = name.getText().toString();
         employee.setEmployeeName(empName);
 
-        Double hoursWorked = Double.parseDouble(hours.getText().toString());
-        employee.setHoursWorked(hoursWorked);
+        // Double hoursWorked = Double.parseDouble(hours.getText().toString());
+        // employee.setHoursWorked(hoursWorked);
 
         Double payHourly = Double.parseDouble(payRate.getText().toString());
         employee.setPayRate(payHourly);
@@ -49,19 +48,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
 
-        btnDatePicker = (Button) findViewById(R.id.btn_date);
+        Button hours = (Button) findViewById(R.id.hours);
+        /*btnDatePicker = (Button) findViewById(R.id.btn_date);
         btnTimePicker = (Button) findViewById(R.id.btn_time);
         txtDate = (EditText) findViewById(R.id.in_date);
         txtTime = (EditText) findViewById(R.id.in_time);
 
         btnDatePicker.setOnClickListener(this);
-        btnTimePicker.setOnClickListener(this);
+        btnTimePicker.setOnClickListener(this);*/
 
+        hours.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                Intent intent = new Intent(MainActivity.this, WorkActivity.class);
+                String strName = "";
+                intent.putExtra("hour", strName);
+                startActivity(intent);
+
+            }
+        });
 
     }
 
-    public void onButtonClicked(View v) {
+    /*public void onButtonClicked(View v) {
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(getFragmentManager(), "Date Picker");
     }
@@ -80,6 +90,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             newFragment.show(getFragmentManager(), "TimePicker");
 
         }
-    }
+    }*/
 
 }
