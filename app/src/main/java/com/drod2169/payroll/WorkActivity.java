@@ -34,6 +34,7 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
+        /* TODO: Make EditText onClick work correctly to show TimePickerDialog and DatePickerDialog */
         /*DateEdit = (EditText) findViewById(R.id.in_date);
         DateEdit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,6 +45,10 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
         });*/
     }
 
+    /* TODO: Create methods to calculate hours.
+       TODO: Create ArrayList to store hours on week basis.
+       TODO: Pass values back to MainActivity.
+     */
 
     public void onButtonClicked(View v) {
         DialogFragment newFragment = new DatePickerFragment();
