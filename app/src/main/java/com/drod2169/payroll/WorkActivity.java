@@ -2,19 +2,29 @@ package com.drod2169.payroll;
 
 
 import android.app.DialogFragment;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TabHost;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
-public class WorkActivity extends AppCompatActivity implements View.OnClickListener {
+public class WorkActivity extends AppCompatActivity implements View.OnClickListener, DatePickerFragment.onDateSelectedListener, TimePickerFragment.onTimeSelectedListener {
 
+    SharedPreferences sharedPreferences;
 
-    static EditText DateEdit;
     Button btnDatePicker, btnTimePicker;
     EditText txtDate, txtTime;
+
+    private String dateString;
+    private String timeString;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,19 +40,6 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
         btnDatePicker.setOnClickListener(this);
         btnTimePicker.setOnClickListener(this);
 
-        EditText hoursWorked = (EditText) findViewById(R.id.hours_worked);
-
-
-
-        /* TODO: Make EditText onClick work correctly to show TimePickerDialog and DatePickerDialog */
-        /*DateEdit = (EditText) findViewById(R.id.in_date);
-        DateEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDatePickerDialog(v);
-                showTimePickerDialog(v);
-            }
-        });*/
     }
 
     /* TODO: Create methods to calculate hours.
@@ -50,26 +47,39 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
        TODO: Pass values back to MainActivity.
      */
 
-    public void onButtonClicked(View v) {
-        DialogFragment newFragment = new DatePickerFragment();
-        newFragment.show(getFragmentManager(), "Date Picker");
-    }
-
     @Override
     public void onClick(View v) {
 
         if (v == btnDatePicker) {
 
-            onButtonClicked(btnDatePicker);
+            DialogFragment newFragment = new DatePickerFragment();
+            newFragment.show(getFragmentManager(), "datePicker");
+
 
         }
+
         if (v == btnTimePicker) {
 
             DialogFragment newFragment = new TimePickerFragment();
-            newFragment.show(getFragmentManager(), "TimePicker");
+            newFragment.show(getFragmentManager(), "timePicker");
 
         }
     }
 
+    @Override
+    public void onDateSelected(String dateSet) {
+
+        dateString = dateSet;
+        Log.i("date: ", dateString);
+    }
+
+
+    @Override
+    public void onTimeSelected(String timeSet) {
+
+        timeString = timeSet;
+        Log.i("Time ", timeString);
+
+    }
 
 }

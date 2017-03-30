@@ -1,19 +1,45 @@
 package com.drod2169.payroll;
 
 
+import android.app.ActionBar;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+import com.drod2169.payroll.OneFragment;
+import com.drod2169.payroll.TwoFragment;
 public class MainActivity extends AppCompatActivity {
 
 
+    private Toolbar toolbar;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+
     Button btnDatePicker, btnTimePicker;
     EditText txtDate, txtTime;
+
+    // action bar
+    private ActionBar actionBar;
+
+    // Refresh menu item
+    private MenuItem refreshMenuItem;
 
 
     public void pay(View view) {
@@ -47,49 +73,82 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        actionBar = getActionBar();
 
-        Button hours = (Button) findViewById(R.id.hours);
-        /*btnDatePicker = (Button) findViewById(R.id.btn_date);
-        btnTimePicker = (Button) findViewById(R.id.btn_time);
-        txtDate = (EditText) findViewById(R.id.in_date);
-        txtTime = (EditText) findViewById(R.id.in_time);
 
-        btnDatePicker.setOnClickListener(this);
-        btnTimePicker.setOnClickListener(this);*/
 
-        hours.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-                Intent intent = new Intent(MainActivity.this, WorkActivity.class);
-                String strName = "";
-                intent.putExtra("hour", strName);
-                startActivity(intent);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        setupViewPager(viewPager);
 
-            }
-        });
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+
+
 
     }
 
-    /*public void onButtonClicked(View v) {
-        DialogFragment newFragment = new DatePickerFragment();
-        newFragment.show(getFragmentManager(), "Date Picker");
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFrag(new OneFragment(), "ONE");
+        adapter.addFrag(new TwoFragment(), "TWO");
+        viewPager.setAdapter(adapter);
+    }
+
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFrag(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
     }
 
     @Override
-    public void onClick(View v) {
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
 
-        if (v == btnDatePicker) {
+        return super.onCreateOptionsMenu(menu);
 
-            onButtonClicked(btnDatePicker);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Take appropriate action for each action item click
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                // settings action
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        if (v == btnTimePicker) {
+    }
 
-            DialogFragment newFragment = new TimePickerFragment();
-            newFragment.show(getFragmentManager(), "TimePicker");
 
-        }
-    }*/
+
 
 }
