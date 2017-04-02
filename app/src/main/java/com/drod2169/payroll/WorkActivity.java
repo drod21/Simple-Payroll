@@ -60,11 +60,6 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    /* TODO: Create methods to calculate hours.
-       TODO: Create ArrayList to store hours on week basis.
-       TODO: Pass values back to MainActivity.
-     */
-
     public void finalHours(View v) {
 
         int h = 0, m = 0;
