@@ -7,9 +7,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+
+import static android.app.Activity.RESULT_OK;
 
 
-public class OneFragment extends Fragment{
+public class OneFragment extends Fragment {
+
+    static final int HOUR_REQUEST_CODE = 1;
+    double hours_final;
+    static String hour_key;
+
+    View rootView;
 
     public OneFragment() {
         // Required empty public constructor
@@ -26,7 +35,7 @@ public class OneFragment extends Fragment{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View rootView = inflater.inflate(R.layout.fragment_one, container, false);
+        rootView = inflater.inflate(R.layout.fragment_one, container, false);
         Button hours = (Button) rootView.findViewById(R.id.hours);
 
         hours.setOnClickListener(new View.OnClickListener() {
@@ -34,13 +43,29 @@ public class OneFragment extends Fragment{
             public void onClick(View v) {
 
                 Intent intent = new Intent(getActivity(), WorkActivity.class);
-                String strName = "";
-                intent.putExtra("hour", strName);
-                startActivity(intent);
+                hours_final = 0.0;
+                intent.putExtra(hour_key, hours_final);
+                startActivityForResult(intent, HOUR_REQUEST_CODE);
 
             }
         });
         return rootView;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == HOUR_REQUEST_CODE) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                hours_final = data.getDoubleExtra(hour_key, HOUR_REQUEST_CODE);
+            }
+        }
+
+
+        EditText hours = (EditText) rootView.findViewById(R.id.hours_worked);
+        hours.setText(String.valueOf(hours_final));
+        MainActivity.employee.setHoursWorked(hours_final);
     }
 
 }

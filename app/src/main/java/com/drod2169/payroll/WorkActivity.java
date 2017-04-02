@@ -2,6 +2,7 @@ package com.drod2169.payroll;
 
 
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,7 @@ import java.util.Locale;
 public class WorkActivity extends AppCompatActivity implements View.OnClickListener, DatePickerFragment.onDateSelectedListener, TimePickerFragment.onTimeSelectedListener {
 
     SharedPreferences sharedPreferences;
+
 
     Employee emp = new Employee();
     Button btnDatePicker, btnTimePicker;
@@ -66,11 +68,11 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
     public void finalHours(View v) {
 
         int h = 0, m = 0;
-        int i = 0;
+        int i;
+
+        double hoursFinal = 0.0;
 
         Date t = new Date();
-
-        //if (hour.size() >= 2 && minute.size() >= 2) {
 
         for (i = 1; i < hour.size(); i++) {
 
@@ -95,9 +97,19 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
             Log.i("Times subtracted: ", String.valueOf(h));
             Log.i("Times subtracted: ", String.valueOf(m));
 
-        }
+            //employee.setMinutes(m);
+            //MainActivity.employee.setHours(h);
+            hoursFinal = (double) h + ((double) m / 100);
 
-        //}
+            Log.i("Final: ", String.valueOf(hoursFinal));
+
+            Intent output = new Intent();
+            output.putExtra(OneFragment.hour_key, hoursFinal);
+            setResult(RESULT_OK, output);
+
+            finish();
+
+        }
 
         emp.setHours(h);
         emp.setMinutes(m);

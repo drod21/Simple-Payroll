@@ -2,11 +2,8 @@ package com.drod2169.payroll;
 
 
 import android.app.ActionBar;
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -19,15 +16,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import com.drod2169.payroll.OneFragment;
-import com.drod2169.payroll.TwoFragment;
 public class MainActivity extends AppCompatActivity {
 
+    static EditText hours;
 
+    private static DecimalFormat df = new DecimalFormat(".##");
+    public static Employee employee = new Employee();
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -44,9 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void pay(View view) {
 
-        Employee employee = new Employee();
-
         Double totalPay;
+
 
         EditText name = (EditText) findViewById(R.id.empName);
         EditText payRate = (EditText) findViewById(R.id.payRate);
@@ -64,7 +63,10 @@ public class MainActivity extends AppCompatActivity {
 
         totalPay = employee.getWeekPay();
 
-        Toast.makeText(getApplicationContext(), "$" + totalPay, Toast.LENGTH_SHORT).show();
+        TextView payText = (TextView) findViewById(R.id.pay);
+        payText.setText(new StringBuilder().append("$").append(String.valueOf(df.format(totalPay))).toString());
+
+        Toast.makeText(getApplicationContext(), "$" + df.format(totalPay), Toast.LENGTH_SHORT).show();
 
     }
 
@@ -74,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         actionBar = getActionBar();
-
 
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
