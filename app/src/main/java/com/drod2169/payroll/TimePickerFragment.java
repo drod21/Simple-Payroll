@@ -24,6 +24,12 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 
         public void onTimeSelected(String timeSet);
 
+        public void onHourSelected(int mHour);
+
+        public void onMinuteSelected(int mMin);
+
+        public void onAMPM(String mAmPm);
+
     }
 
     String time;
@@ -76,15 +82,22 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 
         // Temp hack to get minutes showing correctly with leading zero
 
-       if (minute < 10) {
+        if (minute < 10) {
 
             time =  String.valueOf(currentHour) + ":" + "0" + String.valueOf(minute) + " " + AMPM;
+
+        } else {
+
+            time = String.valueOf(currentHour) + ":" + String.valueOf(minute) + " " + AMPM;
 
         }
 
         tv.setText(time);
 
         mCallBack.onTimeSelected(time);
+        mCallBack.onHourSelected(hourOfDay);
+        mCallBack.onMinuteSelected(minute);
+        mCallBack.onAMPM(AMPM);
 
     }
 

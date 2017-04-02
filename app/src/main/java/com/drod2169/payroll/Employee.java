@@ -1,7 +1,5 @@
 package com.drod2169.payroll;
 
-import java.text.NumberFormat;
-
 /**
  * Created by derekrodriguez on 2/18/17.
  */
@@ -13,6 +11,8 @@ public class Employee {
     private String monthOfYear;
     private String year;
 
+    private double hours;
+    private double minutes;
     private double weekPay;
     private double payRate;
     private double hoursWorked;
@@ -26,6 +26,8 @@ public class Employee {
 
         payRate = 0.0;
         hoursWorked = 0.0;
+        hours = 0;
+        minutes = 0;
 
         employeeName = "";
 
@@ -71,6 +73,14 @@ public class Employee {
 
         this.payRate = payRate;
 
+    }
+
+    public void setMinutes(double minutes) {
+        this.minutes += minutes;
+    }
+
+    public void setHours(double hours) {
+        this.hours += hours;
     }
 
     public void setWeekPay(double hours, double rate) {
@@ -129,5 +139,15 @@ public class Employee {
         return payRate;
 
     }
+
+    public double getMinutes() {
+        return minutes;
+    }
+
+
+    public double getHours() {
+        return hours;
+    }
+
 
 }
