@@ -3,7 +3,6 @@ package com.drod2169.payroll;
 
 import android.app.DialogFragment;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -20,8 +19,13 @@ import java.util.Locale;
 
 public class WorkActivity extends AppCompatActivity implements View.OnClickListener, DatePickerFragment.onDateSelectedListener, TimePickerFragment.onTimeSelectedListener {
 
-    SharedPreferences sharedPreferences;
+    /* TODO: Revisit shared preferences */
+    //SharedPreferences sharedPreferences;
+    /* TODO: Create SQL table for storing data
 
+     */
+
+    DatabaseHandler db = new DatabaseHandler(this);
 
     Employee emp = new Employee();
     Button btnDatePicker, btnTimePicker;
@@ -92,8 +96,6 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
             Log.i("Times subtracted: ", String.valueOf(h));
             Log.i("Times subtracted: ", String.valueOf(m));
 
-            //employee.setMinutes(m);
-            //MainActivity.employee.setHours(h);
             hoursFinal = (double) h + ((double) m / 100);
 
             Log.i("Final: ", String.valueOf(hoursFinal));
@@ -185,6 +187,7 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
         for (String dates : date) {
             Log.i("Dates: ", String.valueOf(date));
         }
+
     }
 
 
@@ -202,6 +205,7 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         Log.i("Time with Date member ", String.valueOf(getTime(timeString)));
+
 
     }
 

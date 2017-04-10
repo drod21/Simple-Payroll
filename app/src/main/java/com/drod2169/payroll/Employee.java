@@ -11,6 +11,10 @@ public class Employee {
     private String monthOfYear;
     private String year;
 
+    private String clockIn;
+    private String clockOut;
+    private String date;
+
     private double hours;
     private double minutes;
     private double weekPay;
@@ -18,26 +22,48 @@ public class Employee {
     private double hoursWorked;
     private double totalPay;
 
+    private int id;
+
+
+    // Empty constructor
 
 
     // Constructor
 
     public Employee() {
 
-        payRate = 0.0;
-        hoursWorked = 0.0;
-        hours = 0;
-        minutes = 0;
+    }
 
-        employeeName = "";
+    public Employee(int id, String name, double rateOfPay, String date, String clockIn, String clockOut) {
 
-        dayOfWeek = "";
-        monthOfYear = "";
-        year = "";
+        this.id = id;
+        this.employeeName = name;
+        this.payRate = rateOfPay;
+        this.date = date;
+        this.clockIn = clockIn;
+        this.clockOut = clockOut;
 
     }
 
+    public Employee(String name, double rateOfPay, String date, String clockIn, String clockOut) {
+
+        this.employeeName = name;
+        this.payRate = rateOfPay;
+        this.date = date;
+        this.clockIn = clockIn;
+        this.clockOut = clockOut;
+
+    }
+
+
+
     // Mutators
+
+    public void setID(int id) {
+
+        this.id = id;
+
+    }
 
     public void setDayOfWeek(String dayOfWeek) {
 
@@ -75,6 +101,18 @@ public class Employee {
 
     }
 
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setClockOut(String clockOut) {
+        this.clockOut = clockOut;
+    }
+
+    public void setClockIn(String clockIn) {
+        this.clockIn = clockIn;
+    }
+
     public void setMinutes(double minutes) {
         this.minutes += minutes;
     }
@@ -95,8 +133,13 @@ public class Employee {
     }
 
 
-
     // Accessors
+
+    public int getId() {
+
+        return id;
+
+    }
 
     public double getWeekPay() {
 
@@ -147,6 +190,21 @@ public class Employee {
 
     public double getHours() {
         return hours;
+    }
+
+
+    public String getDate() {
+        return date;
+    }
+
+
+    public String getClockOut() {
+        return clockOut;
+    }
+
+
+    public String getClockIn() {
+        return clockIn;
     }
 
 

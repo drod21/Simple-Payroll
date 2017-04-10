@@ -10,9 +10,9 @@
         android:text="@string/employee_name"
         android:textSize="18sp"
         android:id="@+id/name"
-        android:layout_above="@+id/empName"
+        android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="12dp" />
+        android:layout_marginTop="42dp" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -21,9 +21,10 @@
         android:text="@string/name_ph"
         android:ems="10"
         android:id="@+id/empName"
-        android:layout_above="@+id/textView2"
-        android:layout_alignStart="@+id/name"
-        android:layout_marginBottom="13dp" />
+        android:layout_below="@+id/name"
+        android:layout_alignEnd="@+id/payRate"
+        android:layout_marginEnd="12dp"
+        android:layout_marginTop="34dp" />
 
     <TextView
         android:text="@string/name_pay"
@@ -31,18 +32,17 @@
         android:layout_height="wrap_content"
         android:id="@+id/textView2"
         android:textSize="18sp"
-        android:layout_above="@+id/hours"
+        android:layout_below="@+id/empName"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="12dp" />
+        android:layout_marginTop="40dp" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/hours_worked"
         android:text="@string/hours"
-        android:layout_alignBottom="@+id/payRate"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="65dp" />
+        android:layout_alignBottom="@+id/hours"
+        android:layout_toEndOf="@+id/name" />
 
     <Button
         android:layout_height="wrap_content"
@@ -50,9 +50,9 @@
         android:layout_width="wrap_content"
         android:text="@string/hours"
         android:onClick="hours"
-        android:layout_above="@+id/hours_worked"
+        android:layout_below="@+id/textView2"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginTop="18dp" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -61,9 +61,9 @@
         android:text="@string/pay_rate"
         android:ems="10"
         android:id="@+id/payRate"
-        android:layout_above="@+id/weekPay"
+        android:layout_below="@+id/hours"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="20dp" />
+        android:layout_marginTop="37dp" />
 
     <Button
         android:text="@string/weekpay"
@@ -71,8 +71,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/weekPay"
         android:onClick="pay"
-        android:layout_above="@+id/pay"
-        android:layout_alignEnd="@+id/empName" />
+        android:layout_below="@+id/payRate"
+        android:layout_toEndOf="@+id/hours"
+        android:layout_marginTop="33dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -80,8 +81,9 @@
         android:id="@+id/pay"
         android:textSize="20sp"
         android:text="@string/pay"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/weekPay" />
+        android:layout_below="@+id/weekPay"
+        android:layout_alignStart="@+id/weekPay"
+        android:layout_marginTop="40dp" />
 
 
 

@@ -1,8 +1,11 @@
 package com.drod2169.payroll;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +13,13 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.MODE_PRIVATE;
 
 
 public class OneFragment extends Fragment {
+    /* TODO: Create SQL table for storing data
+
+     */
 
     static final int HOUR_REQUEST_CODE = 1;
     double hours_final;
@@ -66,6 +73,59 @@ public class OneFragment extends Fragment {
         EditText hours = (EditText) rootView.findViewById(R.id.hours_worked);
         hours.setText(String.valueOf(hours_final));
         MainActivity.employee.setHoursWorked(hours_final);
+        try {
+
+            MainActivity.myDatabase = getActivity().openOrCreateDatabase("EmployeePay", MODE_PRIVATE, null);
+
+            MainActivity.myDatabase.execSQL("CREATE TABLE IF NOT EXISTS employeepay (name VARCHAR, date VARCHAR, payrate DOUBLE(4), clockIn DOUBLE(4), clockOut DOUBLE(4), id INTEGER PRIMARY KEY)");
+
+            ContentValues values = new ContentValues();
+            values.put("name", "test");
+            values.put("date", "4/9/2017");
+            values.put("payrate", 9.00);
+            values.put("clockIn", hours_final);
+            values.put("clockOut", hours_final);
+
+            MainActivity.myDatabase.insert("employeepay", null, values);
+
+            //MainActivity.myDatabase.execSQL("INSERT INTO employeepay (name, clockIn, clockOut, id) VALUES ('Test', " + hours_final + ", " + hours_final + ")");
+
+            Cursor c = MainActivity.myDatabase.rawQuery("SELECT * FROM employeepay", null);
+
+            int nameIndex = c.getColumnIndex("name");
+            int dateIndex = c.getColumnIndex("date");
+            int payRateIndex = c.getColumnIndex("payrate");
+            int clockInIndex = c.getColumnIndex("clockIn");
+            int clockOutIndex = c.getColumnIndex("clockOut");
+            int idIndex = c.getColumnIndex("id");
+            String start = null;
+            String end = null;
+            String type = null;
+
+
+            if (c.moveToFirst()) {
+                do {
+
+                    start = c.getString(nameIndex);
+                    end = c.getString(clockOutIndex);
+                    Log.i("name", c.getString(nameIndex));
+                    Log.i("date", c.getString(dateIndex));
+                    Log.i("Pay rate: ", Double.toString(c.getDouble(payRateIndex)));
+                    Log.i("Clock in: ", Double.toString(c.getDouble(clockInIndex)));
+                    Log.i("Clock out: ", Double.toString(c.getDouble(clockOutIndex)));
+
+                    //Log.i("ID: ", Integer.toString(c.getInt(idIndex)));
+
+                } while (c.moveToNext());
+
+            }
+
+            //MainActivity.myDatabase.execSQL("DROP TABLE employeepay");
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

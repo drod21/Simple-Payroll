@@ -2,11 +2,13 @@ package com.drod2169.payroll;
 
 
 import android.app.ActionBar;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -24,7 +26,11 @@ import java.util.ArrayList;
 import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
-    static EditText hours;
+    /* TODO: Create SQL table for storing data
+
+     */
+
+    static SQLiteDatabase myDatabase;
 
     private static DecimalFormat df = new DecimalFormat(".##");
     public static Employee employee = new Employee();
@@ -87,6 +93,25 @@ public class MainActivity extends AppCompatActivity {
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+
+        /*
+        TabTextColor sets the color for the title of the tabs, passing a ColorStateList here makes
+        tab change colors in different situations such as selected, active, inactive etc
+
+        TabIndicatorColor sets the color for the indiactor below the tabs
+         */
+
+        tabLayout.setTabTextColors(ContextCompat.getColorStateList(this, R.color.tab_selector));
+        tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.indicator));
+
+        /*
+        Adding a onPageChangeListener to the viewPager
+        1st we add the PageChangeListener and pass a TabLayoutPageChangeListener so that Tabs Selection
+        changes when a viewpager page changes.
+         */
+
+
 
 
 
