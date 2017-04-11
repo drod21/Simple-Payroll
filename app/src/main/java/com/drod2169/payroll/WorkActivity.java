@@ -14,15 +14,19 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 
 public class WorkActivity extends AppCompatActivity implements View.OnClickListener, DatePickerFragment.onDateSelectedListener, TimePickerFragment.onTimeSelectedListener {
 
-    /* TODO: Revisit shared preferences */
+    /*
+    TODO: Revisit shared preferences
+     */
     //SharedPreferences sharedPreferences;
-    /* TODO: Create SQL table for storing data
 
+    /* TODO: Create SQL table for storing data
+       TODO: Pass date back to OneFragment
      */
 
     DatabaseHandler db = new DatabaseHandler(this);
@@ -35,6 +39,8 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
 
     int hourSelected;
     int minuteSelected;
+    String name;
+    double payRate;
 
 
     String timeString;
@@ -53,7 +59,6 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_work);
 
-
         btnDatePicker = (Button) findViewById(R.id.btn_date);
         btnTimePicker = (Button) findViewById(R.id.btn_time);
         txtDate = (EditText) findViewById(R.id.in_date);
@@ -71,7 +76,7 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
 
         double hoursFinal = 0.0;
 
-        Date t = new Date();
+        Date t;
 
         for (i = 1; i < hour.size(); i++) {
 
@@ -103,6 +108,25 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
             Intent output = new Intent();
             output.putExtra(OneFragment.hour_key, hoursFinal);
             setResult(RESULT_OK, output);
+
+            Log.i("Insert: ", "Inserting..");
+            try {
+
+                db.addEmployee(new Employee(MainActivity.employee.getEmployeeName(), MainActivity.employee.getPayRate(), dateString, times.get(0), times.get(1)));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Log.i("Reading: ", "Reading all employees..");
+            List<Employee> employees = db.getAllEmployees();
+
+            for (Employee emp : employees) {
+                String log = "Id: " + emp.getId() + " , Name: " + emp.getEmployeeName() + " , " +
+                        emp.getPayRate() + " , " + emp.getDate() + " , " + emp.getClockIn() + " , "
+                        + emp.getClockOut();
+                // Write to the log
+                Log.i("Name: ", log);
+            }
 
             finish();
 
@@ -180,6 +204,7 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
     public void onDateSelected(String dateSet) {
 
         dateString = dateSet;
+
 
         date.add(dateSet);
         Log.i("date: ", dateString);

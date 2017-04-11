@@ -1,11 +1,8 @@
 package com.drod2169.payroll;
 
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import static android.app.Activity.RESULT_OK;
-import static android.content.Context.MODE_PRIVATE;
 
 
 public class OneFragment extends Fragment {
@@ -24,6 +20,7 @@ public class OneFragment extends Fragment {
     static final int HOUR_REQUEST_CODE = 1;
     double hours_final;
     static String hour_key;
+    String date_final;
 
     View rootView;
 
@@ -35,6 +32,7 @@ public class OneFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -66,6 +64,7 @@ public class OneFragment extends Fragment {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
                 hours_final = data.getDoubleExtra(hour_key, HOUR_REQUEST_CODE);
+
             }
         }
 
@@ -73,7 +72,7 @@ public class OneFragment extends Fragment {
         EditText hours = (EditText) rootView.findViewById(R.id.hours_worked);
         hours.setText(String.valueOf(hours_final));
         MainActivity.employee.setHoursWorked(hours_final);
-        try {
+       /* try {
 
             MainActivity.myDatabase = getActivity().openOrCreateDatabase("EmployeePay", MODE_PRIVATE, null);
 
@@ -81,7 +80,7 @@ public class OneFragment extends Fragment {
 
             ContentValues values = new ContentValues();
             values.put("name", "test");
-            values.put("date", "4/9/2017");
+            values.put("date", date_final);
             values.put("payrate", 9.00);
             values.put("clockIn", hours_final);
             values.put("clockOut", hours_final);
@@ -125,7 +124,7 @@ public class OneFragment extends Fragment {
 
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
 }

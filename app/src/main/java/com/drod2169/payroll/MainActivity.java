@@ -37,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    static String empName;
+    static double payHourly;
 
     Button btnDatePicker, btnTimePicker;
     EditText txtDate, txtTime;
@@ -57,13 +59,13 @@ public class MainActivity extends AppCompatActivity {
         EditText payRate = (EditText) findViewById(R.id.payRate);
 
 
-        String empName = name.getText().toString();
+        empName = name.getText().toString();
         employee.setEmployeeName(empName);
 
         // Double hoursWorked = Double.parseDouble(hours.getText().toString());
         // employee.setHoursWorked(hoursWorked);
 
-        Double payHourly = Double.parseDouble(payRate.getText().toString());
+        payHourly = Double.parseDouble(payRate.getText().toString());
         employee.setPayRate(payHourly);
         employee.setWeekPay(employee.getHoursWorked(), employee.getPayRate());
 
