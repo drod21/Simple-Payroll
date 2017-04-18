@@ -46,7 +46,8 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
     String timeString;
     String AMPM;
 
-    ArrayList<String> times = new ArrayList<>();
+    ArrayList<String> clockIn = new ArrayList<>();
+    ArrayList<String> clockOut = new ArrayList<>();
     ArrayList<Date> timedate = new ArrayList<>();
     ArrayList<String> date = new ArrayList<>();
     ArrayList<Integer> hour = new ArrayList<>();
@@ -109,24 +110,71 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
             output.putExtra(OneFragment.hour_key, hoursFinal);
             setResult(RESULT_OK, output);
 
+            MainActivity.employee.setClockIn(clockIn);
+            MainActivity.employee.setClockOut(clockOut);
+
+
+
             Log.i("Insert: ", "Inserting..");
             try {
 
-                db.addEmployee(new Employee(MainActivity.employee.getEmployeeName(), MainActivity.employee.getPayRate(), dateString, times.get(0), times.get(1)));
+
+               /* if (db.dbHasData("employee", "name", MainActivity.employee.getEmployeeName())) {
+                    db.updateEmployee(MainActivity.employee);
+                }*/
+                db.addEmployee(new Employee(MainActivity.employee.getEmployeeName(),
+                        MainActivity.employee.getPayRate(), MainActivity.employee.getDate(),
+                        clockIn, clockOut));
+                /*int z = 1;
+                while (z < employees.size()) {
+                    if (db.getEmployee(z).getId() == MainActivity.employee.getId()) {
+                        db.updateEmployee(MainActivity.employee);
+                    }
+                    z++;
+                }
+
+                if (db.getAllEmployees().g)*/
+
+
+
+
+                /*String message = "";
+
+                if (MainActivity.employee.getPayRate() == 0.0 || MainActivity.employee.getEmployeeName() == null) {
+
+                    message = "Please enter employee name and pay rate";
+
+                } else {
+
+                    db.addEmployee(new Employee(MainActivity.employee.getEmployeeName(), MainActivity.employee.getPayRate(), dateString, times.get(0), times.get(1)));
+
+                }
+
+                if (!Objects.equals(message, "")) {
+
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+
+                }*/
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
             Log.i("Reading: ", "Reading all employees..");
             List<Employee> employees = db.getAllEmployees();
-
             for (Employee emp : employees) {
-                String log = "Id: " + emp.getId() + " , Name: " + emp.getEmployeeName() + " , " +
-                        emp.getPayRate() + " , " + emp.getDate() + " , " + emp.getClockIn() + " , "
-                        + emp.getClockOut();
+                String log = "Id: " + emp.getId() + " , Name: " + emp.getEmployeeName() + " , Pay Rate: " +
+                        emp.getPayRate() + " , Dates: " + emp.getDate() + " , Clock In: " +
+                        emp.getClockIn() + " , Clock Out: " + emp.getClockOut();
+                //MainActivity.employee.setID(emp.getId());
                 // Write to the log
-                Log.i("Name: ", log);
+                Log.i("DB: ", log);
+
+
             }
+            /*for (i = 0; i < employees.size(); i++) {
+                    Log.i("Deleting: ", "Deleting employees.. " + employees.get(i));
+                    db.deleteEmployee(employees.get(i));
+                }*/
 
             finish();
 
@@ -140,6 +188,7 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
         timedate.add(t);
 
     }
+
 
     @Override
     public void onClick(View v) {
@@ -206,16 +255,19 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
         dateString = dateSet;
 
 
+
         date.add(dateSet);
         Log.i("date: ", dateString);
 
         for (String dates : date) {
             Log.i("Dates: ", String.valueOf(date));
         }
+        MainActivity.employee.setDate(date);
 
     }
 
 
+    /* TODO: Correctly add times to corresponding employee instead of all times to all employees */
     @Override
     public void onTimeSelected(String timeSet) {
 
@@ -223,10 +275,17 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
         timeString = timeSet;
         Log.i("Time ", timeString);
 
-        times.add(timeString);
+        if (clockIn.size() == 0) {
+            clockIn.add(timeString);
+        } else {
+            clockOut.add(timeString);
+        }
 
-        for (String time : times) {
-            Log.i("Time ", String.valueOf(times));
+        for (String time : clockIn) {
+            Log.i("Time ", String.valueOf(clockIn));
+        }
+        for (String time : clockOut) {
+            Log.i("Time ", String.valueOf(clockOut));
         }
 
         Log.i("Time with Date member ", String.valueOf(getTime(timeString)));

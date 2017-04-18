@@ -85,6 +85,26 @@
         android:layout_alignStart="@+id/weekPay"
         android:layout_marginTop="40dp" />
 
+    <Button
+        android:id="@+id/setName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="24dp"
+        android:layout_toEndOf="@+id/name"
+        android:onClick="setName"
+        android:text="@string/set_employee_s_name" />
+
+    <Button
+        android:id="@+id/setPay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/payRate"
+        android:layout_marginStart="25dp"
+        android:layout_toEndOf="@+id/pay"
+        android:onClick="setEmpPayRate"
+        android:text="@string/set_pay_rate" />
 
 
 </RelativeLayout>

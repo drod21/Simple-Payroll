@@ -13,4 +13,6 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="set_employee_s_name">Set Employee\'s Name</string>
+    <string name="set_pay_rate">Set Pay Rate</string>
 </resources>

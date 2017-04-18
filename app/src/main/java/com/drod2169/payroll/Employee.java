@@ -1,5 +1,7 @@
 package com.drod2169.payroll;
 
+import java.util.ArrayList;
+
 /**
  * Created by derekrodriguez on 2/18/17.
  */
@@ -11,9 +13,9 @@ public class Employee {
     private String monthOfYear;
     private String year;
 
-    private String clockIn;
-    private String clockOut;
-    private String date;
+    private ArrayList<String> clockIn;
+    private ArrayList<String> clockOut;
+    private ArrayList<String> date;
 
     private double hours;
     private double minutes;
@@ -34,7 +36,7 @@ public class Employee {
 
     }
 
-    public Employee(int id, String name, double rateOfPay, String date, String clockIn, String clockOut) {
+    public Employee(int id, String name, double rateOfPay, ArrayList<String> date, ArrayList<String> clockIn, ArrayList<String> clockOut) {
 
         this.id = id;
         this.employeeName = name;
@@ -42,10 +44,9 @@ public class Employee {
         this.date = date;
         this.clockIn = clockIn;
         this.clockOut = clockOut;
-
     }
 
-    public Employee(String name, double rateOfPay, String date, String clockIn, String clockOut) {
+    public Employee(String name, double rateOfPay, ArrayList<String> date, ArrayList<String> clockIn, ArrayList<String> clockOut) {
 
         this.employeeName = name;
         this.payRate = rateOfPay;
@@ -55,6 +56,8 @@ public class Employee {
 
     }
 
+    public Employee(int id, String name, double rateOfPay, String date, String clockIn, String clockOut) {
+    }
 
 
     // Mutators
@@ -101,15 +104,15 @@ public class Employee {
 
     }
 
-    public void setDate(String date) {
+    public void setDate(ArrayList<String> date) {
         this.date = date;
     }
 
-    public void setClockOut(String clockOut) {
+    public void setClockOut(ArrayList<String> clockOut) {
         this.clockOut = clockOut;
     }
 
-    public void setClockIn(String clockIn) {
+    public void setClockIn(ArrayList<String> clockIn) {
         this.clockIn = clockIn;
     }
 
@@ -193,17 +196,17 @@ public class Employee {
     }
 
 
-    public String getDate() {
+    public ArrayList<String> getDate() {
         return date;
     }
 
 
-    public String getClockOut() {
+    public ArrayList<String> getClockOut() {
         return clockOut;
     }
 
 
-    public String getClockIn() {
+    public ArrayList<String> getClockIn() {
         return clockIn;
     }
 

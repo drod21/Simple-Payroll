@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,12 +28,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String TABLE_EMPLOYEE = "employee";
 
     // Employee Table Columns names
-    private static final String KEY_ID = "id";
-    private static final String KEY_NAME = "name";
-    private static final String KEY_PAY_RATE = "pay_rate";
-    private static final String KEY_DATE = "date";
-    private static final String KEY_CLOCK_IN = "clock_in";
-    private static final String KEY_CLOCK_OUT = "clock_out";
+    public static final String KEY_ID = "id";
+    public static final String KEY_NAME = "name";
+    public static final String KEY_PAY_RATE = "pay_rate";
+    public static final String KEY_DATE = "date";
+    public static final String KEY_CLOCK_IN = "clock_in";
+    public static final String KEY_CLOCK_OUT = "clock_out";
+
+    ArrayList<String> dates;
+    ArrayList<String> clockIns;
+    ArrayList<String> clockOuts;
+
+    public static final String[] ALL_KEYS = new String[]{KEY_ID, KEY_NAME, KEY_DATE, KEY_CLOCK_IN, KEY_CLOCK_OUT};
 
 
     public DatabaseHandler(Context context) {
@@ -59,22 +66,53 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+
+    public Cursor getAllRows() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String where = null;
+        Cursor c = db.query(true, TABLE_EMPLOYEE, ALL_KEYS,
+                where, null, null, null, null, null);
+        if (c != null) {
+            c.moveToFirst();
+        }
+        return c;
+    }
+
     // Add new employee
     public void addEmployee(Employee employee) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
+        dates = employee.getDate();
+        clockIns = employee.getClockIn();
+        clockOuts = employee.getClockOut();
+
         ContentValues values = new ContentValues();
         values.put(KEY_NAME, employee.getEmployeeName());
         values.put(KEY_PAY_RATE, employee.getPayRate());
-        values.put(KEY_DATE, employee.getDate());
-        values.put(KEY_CLOCK_IN, employee.getClockIn());
-        values.put(KEY_CLOCK_OUT, employee.getClockOut());
+        for (int i = 0; i < employee.getDate().size(); i++) {
+            values.put(KEY_DATE, dates.get(i));
+            values.put(KEY_CLOCK_IN, clockIns.get(i));
+            values.put(KEY_CLOCK_OUT, clockOuts.get(i));
+        }
 
-        // Inserting Row
-        db.insert(TABLE_EMPLOYEE, null, values);
+        if (!dbHasData(TABLE_EMPLOYEE, KEY_NAME, employee.getEmployeeName())) {
+
+
+            Log.i("Adding employee: ", employee.getEmployeeName());
+            // Inserting Row
+            db.insert(TABLE_EMPLOYEE, null, values);
+        } else {
+            db.update(TABLE_EMPLOYEE, values, KEY_ID + "=" + MainActivity.employee.getId(), null);
+        }
+
         db.close(); // Close database connection
 
+    }
+
+    public boolean dbHasData(String searchTable, String searchColumn, String searchKey) {
+        String query = "Select * from " + searchTable + " where " + searchColumn + " = ?";
+        return getReadableDatabase().rawQuery(query, new String[]{searchKey}).moveToFirst();
     }
 
     // Get single employee
@@ -95,6 +133,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return employee;
     }
 
+    public Cursor queueAll() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = new String[]{KEY_ID, KEY_NAME};
+        Cursor cursor = db.query(TABLE_EMPLOYEE, columns,
+                null, null, null, null, null);
+
+        return cursor;
+    }
+
     // Get all employees
     public List<Employee> getAllEmployees() {
         List<Employee> employeeList = new ArrayList<Employee>();
@@ -103,6 +150,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
+        ArrayList<String> mDate = new ArrayList<>();
+        ArrayList<String> mClockIn = new ArrayList<>();
+        ArrayList<String> mClockOut = new ArrayList<>();
+        int date_index = cursor.getColumnIndex(KEY_DATE);
+        int clock_in_index = cursor.getColumnIndex(KEY_CLOCK_IN);
+        int clock_out_index = cursor.getColumnIndex(KEY_CLOCK_OUT);
 
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
@@ -111,9 +164,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 employee.setID(Integer.parseInt(cursor.getString(0)));
                 employee.setEmployeeName(cursor.getString(1));
                 employee.setPayRate(Double.parseDouble(cursor.getString(2)));
-                employee.setDate(cursor.getString(3));
-                employee.setClockIn(cursor.getString(4));
-                employee.setClockOut(cursor.getString(5));
+                mDate.add(cursor.getString(3));
+                mClockIn.add(cursor.getString(4));
+                mClockOut.add(cursor.getString(5));
+
+                employee.setDate(mDate);
+                employee.setClockIn(mClockIn);
+                employee.setClockOut(mClockOut);
                 // Adding employee to list
                 employeeList.add(employee);
             } while (cursor.moveToNext());
@@ -127,12 +184,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // Get employee count
     public int getEmployeeCount() {
 
+        int count;
+
         String countQuery = "SELECT * FROM " + TABLE_EMPLOYEE;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
+        count = cursor.getCount();
         cursor.close();
 
-        return cursor.getCount();
+        return count;
 
     }
 
@@ -144,16 +204,19 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_NAME, employee.getEmployeeName());
         values.put(KEY_PAY_RATE, employee.getPayRate());
-        values.put(KEY_DATE, employee.getDate());
-        values.put(KEY_CLOCK_IN, employee.getClockIn());
-        values.put(KEY_CLOCK_OUT, employee.getClockOut());
+        for (int i = 0; i < employee.getDate().size(); i++) {
+            values.put(KEY_DATE, dates.get(i));
+            values.put(KEY_CLOCK_IN, clockIns.get(i));
+            values.put(KEY_CLOCK_OUT, clockOuts.get(i));
+        }
 
         // Update row
 
-        return db.update(TABLE_EMPLOYEE, values, KEY_ID + " = ?",
+        return db.update(TABLE_EMPLOYEE, values, KEY_ID + " = " + employee.getId(),
                 new String[]{String.valueOf(employee.getId())});
 
     }
+
 
     // Delete single employee
     public void deleteEmployee(Employee employee) {

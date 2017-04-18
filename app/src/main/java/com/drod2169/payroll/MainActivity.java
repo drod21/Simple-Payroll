@@ -12,6 +12,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,6 +33,10 @@ public class MainActivity extends AppCompatActivity {
 
     static SQLiteDatabase myDatabase;
 
+    Button setName;
+    Button setPay;
+    Button weekPay;
+
     private static DecimalFormat df = new DecimalFormat(".##");
     public static Employee employee = new Employee();
     private Toolbar toolbar;
@@ -39,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     static String empName;
     static double payHourly;
+
+    static EditText name;
+    static EditText payRate;
 
     Button btnDatePicker, btnTimePicker;
     EditText txtDate, txtTime;
@@ -49,25 +57,44 @@ public class MainActivity extends AppCompatActivity {
     // Refresh menu item
     private MenuItem refreshMenuItem;
 
+    public void setName(View view) {
+
+        ArrayList<Employee> employees = new ArrayList<>();
+        name = (EditText) findViewById(R.id.empName);
+
+        empName = name.getText().toString();
+        employee.setEmployeeName(empName);
+        employees.add(employee);
+        employee.setID(1);
+        Log.i("Employee name: ", employee.getEmployeeName());
+        Log.i("Employee id: ", String.valueOf(employee.getId()));
+
+    }
+
+    public void setEmpPayRate(View view) {
+
+        payRate = (EditText) findViewById(R.id.payRate);
+
+        payHourly = Double.parseDouble(payRate.getText().toString());
+        employee.setPayRate(payHourly);
+        Log.i("Employee pay rate: ", String.valueOf(employee.getPayRate()));
+
+    }
+
 
     public void pay(View view) {
 
         Double totalPay;
 
 
-        EditText name = (EditText) findViewById(R.id.empName);
-        EditText payRate = (EditText) findViewById(R.id.payRate);
-
-
-        empName = name.getText().toString();
-        employee.setEmployeeName(empName);
-
         // Double hoursWorked = Double.parseDouble(hours.getText().toString());
         // employee.setHoursWorked(hoursWorked);
 
-        payHourly = Double.parseDouble(payRate.getText().toString());
-        employee.setPayRate(payHourly);
-        employee.setWeekPay(employee.getHoursWorked(), employee.getPayRate());
+
+        employee.setWeekPay(employee.getHoursWorked(), Double.parseDouble(payRate.getText().toString()));
+        Log.i("Week pay: ", String.valueOf(employee.getWeekPay()));
+        Log.i("Hours worked: ", String.valueOf(employee.getHoursWorked()));
+        Log.i("Pay rate: ", String.valueOf(employee.getPayRate()));
 
         totalPay = employee.getWeekPay();
 
@@ -75,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
         payText.setText(new StringBuilder().append("$").append(String.valueOf(df.format(totalPay))).toString());
 
         Toast.makeText(getApplicationContext(), "$" + df.format(totalPay), Toast.LENGTH_SHORT).show();
+
 
     }
 
