@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
-    /* TODO: Create SQL table for storing data
+    /* TODO: Need to do a MASSIVE code cleanup. Bunch of unused stuff, or redundant/unnecessary stuff.
 
      */
 
