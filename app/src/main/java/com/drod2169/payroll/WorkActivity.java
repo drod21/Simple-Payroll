@@ -39,8 +39,6 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
 
     int hourSelected;
     int minuteSelected;
-    String name;
-    double payRate;
 
 
     String timeString;
@@ -97,8 +95,8 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
 
             }
 
-
             i++;
+
             Log.i("Times subtracted: ", String.valueOf(h));
             Log.i("Times subtracted: ", String.valueOf(m));
 
@@ -110,6 +108,8 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
             output.putExtra(OneFragment.hour_key, hoursFinal);
             setResult(RESULT_OK, output);
 
+            MainActivity.employee.setHours(hoursFinal);
+
             MainActivity.employee.setClockIn(clockIn);
             MainActivity.employee.setClockOut(clockOut);
 
@@ -118,43 +118,9 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
             Log.i("Insert: ", "Inserting..");
             try {
 
-
-               /* if (db.dbHasData("employee", "name", MainActivity.employee.getEmployeeName())) {
-                    db.updateEmployee(MainActivity.employee);
-                }*/
                 db.addEmployee(new Employee(MainActivity.employee.getEmployeeName(),
                         MainActivity.employee.getPayRate(), MainActivity.employee.getDate(),
                         clockIn, clockOut));
-                /*int z = 1;
-                while (z < employees.size()) {
-                    if (db.getEmployee(z).getId() == MainActivity.employee.getId()) {
-                        db.updateEmployee(MainActivity.employee);
-                    }
-                    z++;
-                }
-
-                if (db.getAllEmployees().g)*/
-
-
-
-
-                /*String message = "";
-
-                if (MainActivity.employee.getPayRate() == 0.0 || MainActivity.employee.getEmployeeName() == null) {
-
-                    message = "Please enter employee name and pay rate";
-
-                } else {
-
-                    db.addEmployee(new Employee(MainActivity.employee.getEmployeeName(), MainActivity.employee.getPayRate(), dateString, times.get(0), times.get(1)));
-
-                }
-
-                if (!Objects.equals(message, "")) {
-
-                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-
-                }*/
 
             } catch (Exception e) {
                 e.printStackTrace();

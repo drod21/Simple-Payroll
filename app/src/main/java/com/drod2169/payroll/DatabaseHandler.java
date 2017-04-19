@@ -229,5 +229,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     }
 
+    // Delete single employee by ID
+    public void deleteEmployeeById(int id) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_EMPLOYEE, KEY_ID + " = ?", new String[]{String.valueOf(id)});
+
+        db.close();
+
+    }
+
 
 }

@@ -94,7 +94,7 @@ public class Employee {
 
     public void setHoursWorked(double hoursWorked) {
 
-        this.hoursWorked = hoursWorked;
+        this.hoursWorked += hoursWorked;
 
     }
 

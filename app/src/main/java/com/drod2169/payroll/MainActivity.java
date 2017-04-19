@@ -2,7 +2,6 @@ package com.drod2169.payroll;
 
 
 import android.app.ActionBar;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -17,7 +16,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,12 +29,6 @@ public class MainActivity extends AppCompatActivity {
 
      */
 
-    static SQLiteDatabase myDatabase;
-
-    Button setName;
-    Button setPay;
-    Button weekPay;
-
     private static DecimalFormat df = new DecimalFormat(".##");
     public static Employee employee = new Employee();
     private Toolbar toolbar;
@@ -47,9 +39,6 @@ public class MainActivity extends AppCompatActivity {
 
     static EditText name;
     static EditText payRate;
-
-    Button btnDatePicker, btnTimePicker;
-    EditText txtDate, txtTime;
 
     // action bar
     private ActionBar actionBar;
@@ -149,8 +138,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new OneFragment(), "ONE");
-        adapter.addFrag(new TwoFragment(), "TWO");
+        adapter.addFrag(new OneFragment(), "Home");
+        adapter.addFrag(new TwoFragment(), "Employees");
         viewPager.setAdapter(adapter);
     }
 
