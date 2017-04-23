@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -33,6 +34,8 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
     }
 
     String time;
+    String clockIn;
+    String clockOut;
 
     // Required empty default constructor
     public TimePickerFragment() {
@@ -78,13 +81,14 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         //Do something with the user chosen time
         //Get reference of host activity (XML Layout File) TextView widget
         TextView tv = (TextView) getActivity().findViewById(R.id.in_time);
+        TextView tv2 = (TextView) getActivity().findViewById(R.id.out_time);
         //Display the user changed time on TextView
 
         // Temp hack to get minutes showing correctly with leading zero
 
         if (minute < 10) {
 
-            time =  String.valueOf(currentHour) + ":" + "0" + String.valueOf(minute) + " " + AMPM;
+            time = String.valueOf(currentHour) + ":" + "0" + String.valueOf(minute) + " " + AMPM;
 
         } else {
 
@@ -92,7 +96,15 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 
         }
 
-        tv.setText(time);
+        clockIn = tv.getText().toString();
+        clockOut = tv2.getText().toString();
+
+        if (TextUtils.isEmpty(clockIn)) {
+            tv.setText(time);
+        } else {
+            tv2.setText(time);
+        }
+
 
         mCallBack.onTimeSelected(time);
         mCallBack.onHourSelected(hourOfDay);
@@ -104,7 +116,6 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
 
         try {
             mCallBack = (onTimeSelectedListener) context;
