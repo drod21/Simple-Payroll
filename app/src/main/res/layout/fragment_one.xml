@@ -10,9 +10,9 @@
         android:text="@string/employee_name"
         android:textSize="18sp"
         android:id="@+id/name"
+        android:layout_marginTop="15dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="42dp" />
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -22,9 +22,7 @@
         android:ems="10"
         android:id="@+id/empName"
         android:layout_below="@+id/name"
-        android:layout_alignEnd="@+id/payRate"
-        android:layout_marginEnd="12dp"
-        android:layout_marginTop="34dp" />
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:text="@string/name_pay"
@@ -32,9 +30,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/textView2"
         android:textSize="18sp"
-        android:layout_below="@+id/empName"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="40dp" />
+        android:layout_marginTop="29dp"
+        android:layout_below="@+id/payRate"
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -61,9 +59,9 @@
         android:text="@string/pay_rate"
         android:ems="10"
         android:id="@+id/payRate"
-        android:layout_below="@+id/hours"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="37dp" />
+        android:layout_marginTop="11dp"
+        android:layout_below="@+id/setName"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:text="@string/weekpay"
@@ -71,9 +69,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/weekPay"
         android:onClick="pay"
-        android:layout_below="@+id/payRate"
-        android:layout_toEndOf="@+id/hours"
-        android:layout_marginTop="33dp" />
+        android:layout_marginTop="31dp"
+        android:layout_below="@+id/hours_worked"
+        android:layout_alignEnd="@+id/payRate" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -89,12 +87,11 @@
         android:id="@+id/setName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="42dp"
-        android:layout_marginTop="24dp"
-        android:layout_toEndOf="@+id/name"
         android:onClick="setName"
-        android:text="@string/set_employee_s_name" />
+        android:text="@string/set_employee_s_name"
+        android:layout_below="@+id/empName"
+        android:layout_alignEnd="@+id/weekPay"
+        android:layout_marginTop="13dp" />
 
     <Button
         android:id="@+id/setPay"

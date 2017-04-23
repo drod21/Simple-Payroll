@@ -8,11 +8,13 @@
     <string name="employee_name">Employee Name</string>
     <string name="name_ph">Name</string>
     <string name="date">Select Date</string>
-    <string name="time">Select Time</string>
+    <string name="clock_in">Clock In</string>
+    <string name="clock_out">Clock Out</string>
     <string name="preference_file_key">com.drod2169.payroll.PREFERENCE_FILE_KEY</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="set_employee_s_name">Set Employee\'s Name</string>
     <string name="set_pay_rate">Set Pay Rate</string>
+    <string name="button">Button</string>
 </resources>

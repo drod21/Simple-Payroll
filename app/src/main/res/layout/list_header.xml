@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/emp_name_list"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.25"
+        android:gravity="center"
+        android:text="Name" />
+
+    <TextView
+        android:id="@+id/emp_pay_rate_list"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.25"
+        android:gravity="center"
+        android:text="Pay Rate" />
+
+    <TextView
+        android:id="@+id/emp_date_list"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.25"
+        android:gravity="center"
+        android:text="Dates Worked" />
+
+    <TextView
+        android:id="@+id/emp_clock_in_list"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.25"
+        android:gravity="center"
+        android:text="Clock Ins" />
+
+    <TextView
+        android:id="@+id/emp_clock_out_list"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.25"
+        android:gravity="center"
+        android:text="Clock Outs" />
+
+    <TextView
+        android:id="@+id/emp_hours_list"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.25"
+        android:gravity="center"
+        android:text="Hours Worked" />
+</RelativeLayout>

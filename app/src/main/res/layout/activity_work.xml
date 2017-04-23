@@ -33,68 +33,43 @@
         android:inputType="time" />
 
     <Button
-        android:id="@+id/btn_time"
+        android:id="@+id/btn_clock_in"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/btn_date"
         android:layout_alignStart="@+id/btn_date"
         android:layout_below="@+id/btn_date"
-        android:onClick="showTimeDialog"
-        android:text="@string/time" />
-
-
+        android:onClick="showClockInDialog"
+        android:text="@string/clock_in" />
 
     <EditText
-        android:id="@+id/timeText"
-        android:layout_width="match_parent"
+        android:id="@+id/out_time"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="time"
-        android:layout_below="@+id/dateText"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="55dp" />
+        android:layout_below="@+id/in_time"
+        android:inputType="time" />
 
-    <EditText
-        android:id="@+id/dateText"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/btn_clock_out"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="date"
-        android:layout_below="@+id/btn_time"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="100dp" />
+        android:layout_alignLeft="@+id/btn_clock_in"
+        android:layout_alignStart="@+id/btn_clock_in"
+        android:layout_below="@+id/btn_clock_in"
+        android:onClick="showClockOutDialog"
+        android:text="@string/clock_out" />
+
 
     <Button
         android:id="@+id/hours_new"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/timeText"
+        android:layout_below="@+id/btn_clock_out"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="35dp"
+        android:layout_marginTop="122dp"
         android:onClick="finalHours"
-        android:text="Button" />
-
-
-    <!--<TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/btn_time"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="141dp">
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </TableLayout>-->
+        android:text="@string/hours" />
 
 
 
