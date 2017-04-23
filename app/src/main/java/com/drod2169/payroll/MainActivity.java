@@ -2,6 +2,7 @@ package com.drod2169.payroll;
 
 
 import android.app.ActionBar;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,14 +25,23 @@ import android.widget.Toast;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 public class MainActivity extends AppCompatActivity {
 
-    /* TODO: Need to do a MASSIVE code cleanup. Bunch of unused stuff, or redundant/unnecessary stuff.
+    /* TODO: Create SQL table for storing data
 
      */
 
+    static SQLiteDatabase myDatabase;
+
+    Button setName;
+    Button setPay;
+    Button weekPay;
+
     private static DecimalFormat df = new DecimalFormat(".##");
     public static Employee employee = new Employee();
+    static List<Employee> employees = new ArrayList<>();
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -45,29 +56,63 @@ public class MainActivity extends AppCompatActivity {
 
     // Refresh menu item
     private MenuItem refreshMenuItem;
+    DatabaseHandler db = new DatabaseHandler(this);
 
     public void setName(View view) {
 
-        ArrayList<Employee> employees = new ArrayList<>();
+
         name = (EditText) findViewById(R.id.empName);
 
         empName = name.getText().toString();
-        employee.setEmployeeName(empName);
-        employees.add(employee);
-        employee.setID(1);
-        Log.i("Employee name: ", employee.getEmployeeName());
-        Log.i("Employee id: ", String.valueOf(employee.getId()));
+
+        employees = db.getAllEmployees();
+
+        boolean found = false;
+
+        for (Employee emp1 : employees) {
+
+            if (Objects.equals(empName, emp1.getEmployeeName())) {
+                employee = emp1;
+                found = true;
+            }
+        }
+
+        if (found) {
+            setPayRateView();
+        }
+
+        if (!found) {
+            employee.setEmployeeName(empName);
+            employees.add(employee);
+            employee.setID(1);
+            Log.i("Employee name: ", employee.getEmployeeName());
+            Log.i("Employee id: ", String.valueOf(employee.getId()));
+        }
+
+        Log.i("Employee: ", employee.getEmployeeName() + " Date: " + String.valueOf(employee.getDate())
+                + " Clock In: " + String.valueOf(employee.getClockIn()) + " Clock Out: " + String.valueOf(employee.getClockOut()));
 
     }
+
 
     public void setEmpPayRate(View view) {
 
         payRate = (EditText) findViewById(R.id.payRate);
 
         payHourly = Double.parseDouble(payRate.getText().toString());
-        employee.setPayRate(payHourly);
+
+        if (employee.getPayRate() == 0) {
+            employee.setPayRate(payHourly);
+        } else {
+            payRate.setText(String.valueOf(employee.getPayRate()));
+        }
         Log.i("Employee pay rate: ", String.valueOf(employee.getPayRate()));
 
+    }
+
+    public void setPayRateView() {
+        payRate = (EditText) findViewById(R.id.payRate);
+        payRate.setText(String.valueOf(employee.getPayRate()));
     }
 
 
@@ -138,8 +183,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new OneFragment(), "Home");
-        adapter.addFrag(new TwoFragment(), "Employees");
+        adapter.addFrag(new OneFragment(), "ONE");
+        adapter.addFrag(new TwoFragment(), "TWO");
         viewPager.setAdapter(adapter);
     }
 
@@ -193,7 +238,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
-
+    @Override
+    protected void onDestroy() {
+        db.close();
+        super.onDestroy();
+    }
 }
