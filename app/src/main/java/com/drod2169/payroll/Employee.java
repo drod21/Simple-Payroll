@@ -57,6 +57,7 @@ public class Employee {
     }
 
     public Employee(int id, String name, double rateOfPay, String date, String clockIn, String clockOut) {
+
     }
 
 
@@ -104,6 +105,11 @@ public class Employee {
 
     }
 
+    public void setSingleDate(String date) {
+        this.date.add(date);
+    }
+
+
     public void setDate(ArrayList<String> date) {
         this.date = date;
     }
@@ -112,6 +118,13 @@ public class Employee {
         this.clockOut = clockOut;
     }
 
+    public void setSingleClockOut(String clockOut) {
+        this.clockOut.add(clockOut);
+    }
+
+    public void setSingleClockIn(String clockIn) {
+        this.clockIn.add(clockIn);
+    }
     public void setClockIn(ArrayList<String> clockIn) {
         this.clockIn = clockIn;
     }
