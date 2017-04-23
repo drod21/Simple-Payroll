@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -39,6 +40,8 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
 
     int hourSelected;
     int minuteSelected;
+    String name;
+    double payRate;
 
 
     String timeString;
@@ -59,7 +62,7 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_work);
 
         btnDatePicker = (Button) findViewById(R.id.btn_date);
-        btnTimePicker = (Button) findViewById(R.id.btn_time);
+        btnTimePicker = (Button) findViewById(R.id.btn_clock_in);
         txtDate = (EditText) findViewById(R.id.in_date);
         txtTime = (EditText) findViewById(R.id.in_time);
 
@@ -95,8 +98,8 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
 
             }
 
-            i++;
 
+            i++;
             Log.i("Times subtracted: ", String.valueOf(h));
             Log.i("Times subtracted: ", String.valueOf(m));
 
@@ -108,19 +111,37 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
             output.putExtra(OneFragment.hour_key, hoursFinal);
             setResult(RESULT_OK, output);
 
-            MainActivity.employee.setHours(hoursFinal);
-
-            MainActivity.employee.setClockIn(clockIn);
-            MainActivity.employee.setClockOut(clockOut);
-
-
+            Log.i("Time from object: ", String.valueOf(MainActivity.employee.getClockIn()));
+            Log.i("ClockOut from object: ", String.valueOf(MainActivity.employee.getClockOut()));
 
             Log.i("Insert: ", "Inserting..");
             try {
+                db.addEmployee(MainActivity.employee);
 
-                db.addEmployee(new Employee(MainActivity.employee.getEmployeeName(),
+                TwoFragment.arrayAdapter.notifyDataSetChanged();
+/*                db.addEmployee(new Employee(MainActivity.employee.getEmployeeName(),
                         MainActivity.employee.getPayRate(), MainActivity.employee.getDate(),
-                        clockIn, clockOut));
+                        MainActivity.employee.getClockIn(), MainActivity.employee.getClockOut()));
+*/
+
+
+                /*String message = "";
+
+                if (MainActivity.employee.getPayRate() == 0.0 || MainActivity.employee.getEmployeeName() == null) {
+
+                    message = "Please enter employee name and pay rate";
+
+                } else {
+
+                    db.addEmployee(new Employee(MainActivity.employee.getEmployeeName(), MainActivity.employee.getPayRate(), dateString, times.get(0), times.get(1)));
+
+                }
+
+                if (!Objects.equals(message, "")) {
+
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+
+                }*/
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -173,6 +194,21 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
             newFragment.show(getFragmentManager(), "timePicker");
 
         }
+
+    }
+
+
+    public void showClockInDialog(View v) {
+
+        DialogFragment dialogFragment = new TimePickerFragment();
+        dialogFragment.show(getFragmentManager(), "timePicker");
+    }
+
+    public void showClockOutDialog(View v) {
+
+        DialogFragment dialogFragment = new TimePickerFragment();
+        dialogFragment.show(getFragmentManager(), "timePicker");
+
     }
 
     public Date getTime(String timePicked) {
@@ -228,12 +264,21 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
         for (String dates : date) {
             Log.i("Dates: ", String.valueOf(date));
         }
-        MainActivity.employee.setDate(date);
+
+
+        if (MainActivity.employee.getDate() == null) {
+            MainActivity.employee.setDate(date);
+        } else {
+            MainActivity.employee.setSingleDate(dateSet);
+        }
+
+        Log.i("Dates from object: ", String.valueOf(MainActivity.employee.getDate()));
 
     }
 
 
-    /* TODO: Correctly add times to corresponding employee instead of all times to all employees */
+    /* TODO: Correctly add times to corresponding employee instead of all times to all employees
+    * TODO: set employee object equal to database employee */
     @Override
     public void onTimeSelected(String timeSet) {
 
@@ -241,21 +286,43 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
         timeString = timeSet;
         Log.i("Time ", timeString);
 
-        if (clockIn.size() == 0) {
-            clockIn.add(timeString);
-        } else {
-            clockOut.add(timeString);
+        TextView tv = (TextView) findViewById(R.id.in_time);
+        TextView tv2 = (TextView) findViewById(R.id.out_time);
+
+        String clockInTest = tv.getText().toString();
+        String clockOutTest = tv2.getText().toString();
+
+        if (!clockInTest.isEmpty() && clockOutTest.isEmpty()) {
+            clockIn.add(clockInTest);
+            int i = clockIn.indexOf(clockInTest);
+
+            if (MainActivity.employee.getClockIn() == null) {
+                MainActivity.employee.setClockIn(clockIn);
+            } else {
+                MainActivity.employee.setSingleClockIn(clockIn.get(i));
+            }
+        }
+
+        if (!clockOutTest.isEmpty()) {
+            clockOut.add(clockOutTest);
+            int j = clockOut.indexOf(clockOutTest);
+
+            if (MainActivity.employee.getClockOut() == null) {
+                MainActivity.employee.setClockOut(clockOut);
+            } else {
+                MainActivity.employee.setSingleClockOut(clockOut.get(j));
+            }
         }
 
         for (String time : clockIn) {
-            Log.i("Time ", String.valueOf(clockIn));
+            Log.i("Clock In: ", String.valueOf(clockIn));
         }
         for (String time : clockOut) {
-            Log.i("Time ", String.valueOf(clockOut));
+            Log.i("Clock Out: ", String.valueOf(clockOut));
         }
 
-        Log.i("Time with Date member ", String.valueOf(getTime(timeString)));
-
+        Log.i("Time from object: ", String.valueOf(MainActivity.employee.getClockIn()));
+        Log.i("ClockOut from object: ", String.valueOf(MainActivity.employee.getClockOut()));
 
     }
 
