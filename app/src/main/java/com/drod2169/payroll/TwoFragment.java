@@ -13,8 +13,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 
 import static android.R.layout.simple_list_item_1;
@@ -51,15 +49,22 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
         employees = (ArrayList<Employee>) databaseHandler.getAllEmployees();
 
         String name;
-        List<String> values = new ArrayList<String>();
+        final List<String> values = new ArrayList<String>();
         for (Employee emps : employees) {
 
             name = emps.getEmployeeName();
 
             values.add(name);
+            //Collections.sort(values);
 
         }
 
+        /*ArrayList<String> datesToSort = new ArrayList<>();
+        for (Employee emp : employees) {
+            datesToSort = emp.getDate();
+        }*/
+
+        //Collections.sort(datesToSort);
 
         for (Employee emp : employees) {
             String log = "Id: " + emp.getId() + " , Name: " + emp.getEmployeeName() + " , Pay Rate: " +
@@ -71,7 +76,9 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
         }
 
         arrayAdapter = new ArrayAdapter<>(getActivity(), simple_list_item_1, values);
+
         listView.setAdapter(arrayAdapter);
+        arrayAdapter.notifyDataSetChanged();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -102,13 +109,11 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
 
                                 DatabaseHandler db = new DatabaseHandler(getContext());
 
-                                db.deleteEmployeeById(itemToDelete);
+                                Log.i("Employee to delete: ", employees.get(itemToDelete).getEmployeeName());
+                                db.deleteEmployee(employees.get(itemToDelete));
+                                values.remove(itemToDelete);
+                                employees.remove(itemToDelete);
                                 arrayAdapter.notifyDataSetChanged();
-
-
-                                HashSet<String> set = new HashSet<String>((Collection<? extends String>) MainActivity.employee);
-
-
                             }
                         })
                         .setNegativeButton("No", null)
