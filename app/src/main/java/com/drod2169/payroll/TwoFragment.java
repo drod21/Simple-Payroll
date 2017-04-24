@@ -13,7 +13,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import static android.R.layout.simple_list_item_1;
 
@@ -24,6 +26,8 @@ public class TwoFragment extends android.support.v4.app.Fragment {
     static ArrayAdapter<String> arrayAdapter;
     static ArrayList<Employee> employees = new ArrayList<>();
     static ArrayList<String> results = new ArrayList<String>();
+    static List<String> values;
+    static final ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 
     ListView listView;
 
@@ -45,11 +49,12 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
     listView = (ListView) view.findViewById(R.id.employee_list);
     databaseHandler = new DatabaseHandler(getContext());
 
+
     try {
-        employees = (ArrayList<Employee>) databaseHandler.getAllEmployees();
+
 
         String name;
-        final List<String> values = new ArrayList<String>();
+        values = new ArrayList<String>();
         for (Employee emps : employees) {
 
             name = emps.getEmployeeName();
@@ -58,7 +63,6 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
             //Collections.sort(values);
 
         }
-
         /*ArrayList<String> datesToSort = new ArrayList<>();
         for (Employee emp : employees) {
             datesToSort = emp.getDate();
@@ -69,7 +73,7 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
         for (Employee emp : employees) {
             String log = "Id: " + emp.getId() + " , Name: " + emp.getEmployeeName() + " , Pay Rate: " +
                     emp.getPayRate() + " , Dates: " + emp.getDate() + " , Clock In: " +
-                    emp.getClockIn() + " , Clock Out: " + emp.getClockOut();
+                    emp.getClockIn() + " , Clock Out: " + emp.getClockOut() + " , Hours Worked: " + emp.getHoursWorked();
             //MainActivity.employee.setID(emp.getId());
             // Write to the log
             Log.i("DB: ", log);
@@ -107,13 +111,8 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
 
-                                DatabaseHandler db = new DatabaseHandler(getContext());
+                                updateDeleteItems(itemToDelete);
 
-                                Log.i("Employee to delete: ", employees.get(itemToDelete).getEmployeeName());
-                                db.deleteEmployee(employees.get(itemToDelete));
-                                values.remove(itemToDelete);
-                                employees.remove(itemToDelete);
-                                arrayAdapter.notifyDataSetChanged();
                             }
                         })
                         .setNegativeButton("No", null)
@@ -132,6 +131,64 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
     }
 
     return view;
+
+}
+
+    public void updateListView(String newNames) {
+
+        List<String> newList = new ArrayList<String>();
+        newList.add(newNames);
+        for (int i = 0; i < values.size(); i++) {
+            if (Objects.equals(values.get(i), newNames)) {
+                break;
+            } else {
+                newList.add(newNames);
+            }
+        }
+
+        values = newList;
+        Log.i("Values: ", String.valueOf(values));
+        arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, values);
+
+        arrayAdapter.notifyDataSetChanged();
+
+    }
+
+
+    public void updateDeleteItems(int id) {
+
+        DatabaseHandler db = new DatabaseHandler(getContext());
+
+        Log.i("Employee to delete: ", employees.get(id).getEmployeeName());
+        db.deleteEmployee(employees.get(id));
+        values.remove(id);
+        employees.remove(id);
+        arrayAdapter.notifyDataSetChanged();
+
+    }
+
+    private void populateList() {
+
+        employees = (ArrayList<Employee>) databaseHandler.getAllEmployees();
+
+        HashMap<String, String> temp = new HashMap<>();
+        for (Employee emp : employees) {
+            temp.put("name", emp.getEmployeeName());
+        /*temp.put("pay_rate", String.valueOf(emp.getPayRate()));
+        temp.put("date", String.valueOf(emp.getDate()));
+        temp.put("clock_in", String.valueOf(emp.getClockIn()));
+        temp.put("clock_out", String.valueOf(emp.getClockOut()));
+        temp.put("hours_worked", String.valueOf(emp.getHoursWorked()));*/
+            list.add(temp);
+        }
+    }
+
+    @Override
+    public void onResume() {
+
+        super.onResume();
+
+        arrayAdapter.setNotifyOnChange(true);
 
     }
 
