@@ -59,7 +59,7 @@ public class EmployeeActivity extends AppCompatActivity {
                 empClockInText.setText(employee.getClockIn().get(i));
                 empClockOutText.setText(employee.getClockOut().get(i));
             }
-            empHoursText.setText(String.valueOf(employee.getHours()));
+            empHoursText.setText(String.valueOf(employee.getHoursWorked()));
 
             tableLayout.addView(tableRow);
             TwoFragment.arrayAdapter.notifyDataSetChanged();
