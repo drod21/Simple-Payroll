@@ -13,6 +13,8 @@ public class Employee {
     private String monthOfYear;
     private String year;
 
+    /* TODO: Possibly need to get rid of ArrayLists... Explore options */
+
     private ArrayList<String> clockIn;
     private ArrayList<String> clockOut;
     private ArrayList<String> date;
@@ -36,7 +38,7 @@ public class Employee {
 
     }
 
-    public Employee(int id, String name, double rateOfPay, ArrayList<String> date, ArrayList<String> clockIn, ArrayList<String> clockOut) {
+    public Employee(int id, String name, double rateOfPay, ArrayList<String> date, ArrayList<String> clockIn, ArrayList<String> clockOut, double hoursWorked) {
 
         this.id = id;
         this.employeeName = name;
@@ -44,19 +46,21 @@ public class Employee {
         this.date = date;
         this.clockIn = clockIn;
         this.clockOut = clockOut;
+        this.hoursWorked += hoursWorked;
     }
 
-    public Employee(String name, double rateOfPay, ArrayList<String> date, ArrayList<String> clockIn, ArrayList<String> clockOut) {
+    public Employee(String name, double rateOfPay, ArrayList<String> date, ArrayList<String> clockIn, ArrayList<String> clockOut, double hoursWorked) {
 
         this.employeeName = name;
         this.payRate = rateOfPay;
         this.date = date;
         this.clockIn = clockIn;
         this.clockOut = clockOut;
+        this.hoursWorked += hoursWorked;
 
     }
 
-    public Employee(int id, String name, double rateOfPay, String date, String clockIn, String clockOut) {
+    public Employee(int id, String name, double rateOfPay, String date, String clockIn, String clockOut, double hoursWorked) {
 
     }
 
