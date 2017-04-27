@@ -3,6 +3,7 @@ package com.drod2169.payroll;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,6 +73,7 @@ public class OneFragment extends Fragment {
         EditText hours = (EditText) rootView.findViewById(R.id.hours_worked);
         hours.setText(String.valueOf(hours_final));
         MainActivity.employee.setHoursWorked(hours_final);
+        Log.i("Hours worked: ", String.valueOf(hours_final));
        /* try {
 
             MainActivity.myDatabase = getActivity().openOrCreateDatabase("EmployeePay", MODE_PRIVATE, null);

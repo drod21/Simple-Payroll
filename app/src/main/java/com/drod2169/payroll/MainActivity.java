@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     static String empName;
     static double payHourly;
 
+    public static int size;
+
     static EditText name;
     static EditText payRate;
 
@@ -65,8 +67,6 @@ public class MainActivity extends AppCompatActivity {
 
         empName = name.getText().toString();
 
-        employees = db.getAllEmployees();
-
         boolean found = false;
 
         for (Employee emp1 : employees) {
@@ -82,15 +82,24 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (!found) {
-            employee.setEmployeeName(empName);
-            employees.add(employee);
-            employee.setID(1);
-            Log.i("Employee name: ", employee.getEmployeeName());
-            Log.i("Employee id: ", String.valueOf(employee.getId()));
-        }
+            Employee emp = new Employee();
+            emp.setEmployeeName(empName);
 
-        Log.i("Employee: ", employee.getEmployeeName() + " Date: " + String.valueOf(employee.getDate())
-                + " Clock In: " + String.valueOf(employee.getClockIn()) + " Clock Out: " + String.valueOf(employee.getClockOut()));
+            employees.add(emp);
+
+
+            emp.setID(size);
+        }
+        for (Employee emps : employees) {
+            Log.i("Employee: ", emps.getEmployeeName());
+            Log.i("Employee ID ", String.valueOf(emps.getId()));
+        }
+        Log.i("Employee name: ", employees.get(size).getEmployeeName());
+        Log.i("Employee id: ", String.valueOf(employee.getId()));
+
+
+        Log.i("ID " + employees.get(size).getId() + " Employee: ", employees.get(size).getEmployeeName() + " Date: " + String.valueOf(employees.get(size).getDate())
+                + " Clock In: " + String.valueOf(employees.get(size).getClockIn()) + " Clock Out: " + String.valueOf(employees.get(size).getClockOut()));
 
     }
 
@@ -99,20 +108,26 @@ public class MainActivity extends AppCompatActivity {
 
         payRate = (EditText) findViewById(R.id.payRate);
 
+       /* int size;
+        for (size = 0; size < employees.size(); size++) {
+            if (employees.get(size).getEmployeeName() == )
+        }
+*/
         payHourly = Double.parseDouble(payRate.getText().toString());
 
-        if (employee.getPayRate() == 0) {
-            employee.setPayRate(payHourly);
+        if (employees.get(size).getPayRate() == 0) {
+            employees.get(size).setPayRate(payHourly);
         } else {
-            payRate.setText(String.valueOf(employee.getPayRate()));
+            employees.get(size).setPayRate(payHourly);
+            payRate.setText(String.valueOf(employees.get(size).getPayRate()));
         }
-        Log.i("Employee pay rate: ", String.valueOf(employee.getPayRate()));
+        Log.i("Employee pay rate: ", String.valueOf(employees.get(size).getPayRate()));
 
     }
 
     public void setPayRateView() {
         payRate = (EditText) findViewById(R.id.payRate);
-        payRate.setText(String.valueOf(employee.getPayRate()));
+        payRate.setText(String.valueOf(employees.get(size).getPayRate()));
     }
 
 
@@ -144,6 +159,26 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        employees = db.getAllEmployees();
+
+        int i = 0;
+
+        for (Employee emp1 : employees) {
+
+            if (Objects.equals(empName, emp1.getEmployeeName())) {
+
+                break;
+
+            }
+            i++;
+        }
+
+        if (employees.size() <= 1) {
+            size = 0;
+        } else {
+            size = i;
+        }
 
         actionBar = getActionBar();
 

@@ -25,7 +25,7 @@
                 android:value=".MainActivity" />
         </activity>
         <activity android:name=".LVActivity" />
-        <activity android:name=".EmployeeActivity"></activity>
+        <activity android:name=".EmployeeActivity" />
     </application>
 
 </manifest>
