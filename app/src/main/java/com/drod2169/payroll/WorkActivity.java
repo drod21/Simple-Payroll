@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -32,9 +33,10 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
 
     DatabaseHandler db = new DatabaseHandler(this);
 
-    Employee emp = new Employee();
-    Button btnDatePicker, btnTimePicker;
+    Button btnDatePicker, btnClockInPicker, btnClockOutPicker;
     EditText txtDate, txtTime;
+
+    EmployeeSingleton employeeSingleton = EmployeeSingleton.getInstance();
 
     String dateString;
 
@@ -43,6 +45,9 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
 
     String timeString;
     String AMPM;
+
+    int h = 0;
+    int m = 0;
 
     ArrayList<String> clockIn = new ArrayList<>();
     ArrayList<String> clockOut = new ArrayList<>();
@@ -57,137 +62,98 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_work);
+        EmployeeSingleton empSingleton = (EmployeeSingleton) getApplicationContext();
 
         btnDatePicker = (Button) findViewById(R.id.btn_date);
-        btnTimePicker = (Button) findViewById(R.id.btn_clock_in);
+        btnClockInPicker = (Button) findViewById(R.id.btn_clock_in);
+        btnClockOutPicker = (Button) findViewById(R.id.btn_clock_out);
         txtDate = (EditText) findViewById(R.id.in_date);
         txtTime = (EditText) findViewById(R.id.in_time);
 
         btnDatePicker.setOnClickListener(this);
-        btnTimePicker.setOnClickListener(this);
+        btnClockInPicker.setOnClickListener(this);
+        btnClockOutPicker.setOnClickListener(this);
 
     }
 
     public void finalHours(View v) {
 
-        int h = 0, m = 0;
         int i;
 
         double hoursFinal = 0.0;
 
         Date t;
 
-        for (i = 1; i < hour.size(); i++) {
+        int hoursTime, minutesTime;
 
-            if (hour.get(i) > hour.get(i - 1)) {
-                h = getHours(hour.get(i - 1), hour.get(i));
-                //m = getMinutes(minute.get(i), minute.get(i + 1));
-            }
+        hoursTime = getHours();
+        minutesTime = getMinutes();
+        Log.i("Hours subtracted: ", String.valueOf(h));
+        Log.i("Minutes subtracted: ", String.valueOf(m));
+        Log.i("Hours subtracted new: ", String.valueOf(hoursTime));
+        Log.i("Minute subtracted new: ", String.valueOf(minutesTime));
 
-            if (minute.get(i) < minute.get(i - 1)) {
+        hoursFinal = (double) hoursTime + ((double) minutesTime / 100);
+        ArrayList<Double> hours = new ArrayList<>();
+        hours.add(hoursFinal);
 
-                --h;
-                m = getMinutes(minute.get(i - 1), minute.get(i)) + 60;
+        Log.i("Final: ", String.valueOf(hoursFinal));
+        if (EmployeeSingleton.getInstance().getWorkedHours() == null) {
+            EmployeeSingleton.getInstance().setWorkedHours(hours);
+        } else {
+            EmployeeSingleton.getInstance().setSingleWorkedHours(hoursFinal);
+        }
+        //Log.i("Hours worked: ", String.valueOf(employeeSingleton.getWorkedHours()));
 
-            } else if (minute.get(i) >= minute.get(i - 1)) {
+        Intent output = new Intent();
+        output.putExtra(OneFragment.hour_key, hoursFinal);
+        setResult(RESULT_OK, output);
 
-                m = getMinutes(minute.get(i - 1), minute.get(i));
+        Log.i("Time from object: ", String.valueOf(employeeSingleton.getClockIn()));
+        Log.i("ClockOut from object: ", String.valueOf(employeeSingleton.getClockOut()));
 
-            }
+        Log.i("Insert: ", "Inserting..");
+        try {
 
+            db.addEmployee(employeeSingleton);
 
-            i++;
-            Log.i("Times subtracted: ", String.valueOf(h));
-            Log.i("Times subtracted: ", String.valueOf(m));
-
-            hoursFinal = (double) h + ((double) m / 100);
-
-            Log.i("Final: ", String.valueOf(hoursFinal));
-
-            MainActivity.employees.get(MainActivity.size).setHoursWorked(hoursFinal);
-
-            Log.i("Hours worked: ", String.valueOf(MainActivity.employees.get(MainActivity.size).getHoursWorked()));
-
-            Intent output = new Intent();
-            output.putExtra(OneFragment.hour_key, hoursFinal);
-            setResult(RESULT_OK, output);
-
-            Log.i("Time from object: ", String.valueOf(MainActivity.employees.get(MainActivity.size).getClockIn()));
-            Log.i("ClockOut from object: ", String.valueOf(MainActivity.employees.get(MainActivity.size).getClockOut()));
-
-            Log.i("Insert: ", "Inserting..");
-            try {
-
-                db.addEmployee(MainActivity.employees.get(MainActivity.size));
-
-                TwoFragment.arrayAdapter.notifyDataSetChanged();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            Log.i("Reading: ", "Reading all employees..");
-            List<Employee> employees = db.getAllEmployees();
-            for (Employee emp : employees) {
-                String log = "Id: " + emp.getId() + " , Name: " + emp.getEmployeeName() + " , Pay Rate: " +
-                        emp.getPayRate() + " , Dates: " + emp.getDate() + " , Clock In: " +
-                        emp.getClockIn() + " , Clock Out: " + emp.getClockOut() + " , Hours Worked: " + emp.getHoursWorked();
-                //MainActivity.employee.setID(emp.getId());
-                // Write to the log
-                Log.i("DB: ", log);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Log.i("Reading: ", "Reading all employees..");
+        List<Employee> employees = db.getAllEmployees();
+        for (Employee emp : employees) {
+            String log = "Id: " + emp.getId() + " , Name: " + emp.getEmployeeName() + " , Pay Rate: " +
+                    emp.getPayRate() + " , Dates: " + emp.getDate() + " , Clock In: " +
+                    emp.getClockIn() + " , Clock Out: " + emp.getClockOut() + " , Hours Worked: " + emp.getHoursWorked();
+            //MainActivity.employee.setID(emp.getId());
+            // Write to the log
+            Log.i("DB from WorkActivity ", log);
 
 
-            }
+        }
             /*for (i = 0; i < employees.size(); i++) {
                     Log.i("Deleting: ", "Deleting employees.. " + employees.get(i));
                     db.deleteEmployee(employees.get(i));
                 }*/
 
-            finish();
 
-        }
-
-        emp.setHours(h);
-        emp.setMinutes(m);
-        String time = String.valueOf(h) + ":" + String.valueOf(m);
-
-        t = getTime(time);
-        timedate.add(t);
+        finish();
 
     }
 
 
     @Override
     public void onClick(View v) {
-
         if (v == btnDatePicker) {
-
             DialogFragment newFragment = new DatePickerFragment();
             newFragment.show(getFragmentManager(), "datePicker");
-
-
         }
 
-        if (v == btnTimePicker) {
-
+        if (v == btnClockInPicker || v == btnClockOutPicker) {
             DialogFragment newFragment = new TimePickerFragment();
             newFragment.show(getFragmentManager(), "timePicker");
-
         }
-
-    }
-
-
-    public void showClockInDialog(View v) {
-
-        DialogFragment dialogFragment = new TimePickerFragment();
-        dialogFragment.show(getFragmentManager(), "timePicker");
-    }
-
-    public void showClockOutDialog(View v) {
-
-        DialogFragment dialogFragment = new TimePickerFragment();
-        dialogFragment.show(getFragmentManager(), "timePicker");
-
     }
 
     public Date getTime(String timePicked) {
@@ -207,25 +173,41 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    public int getMinutes(int t1, int t2) {
+    public int getMinutes() {
 
-        int t3;
+        int t1, t2, t3 = 0;
 
+        t2 = minute.get(1);
+        t1 = minute.get(0);
 
-        t3 = t2 - t1;
+        if (t2 < t1 && h != 0) {
+            --h;
+            t3 = (t1 - t2) + 60;
+        } else {
+            t3 = t2 - t1;
+        }
+        m = t3;
 
-        return t3;
+        return m;
+
     }
 
-    public int getHours(int t1, int t2) {
+    public int getHours() {
 
-        int t3 = 0;
+        int t1, t2, t3 = 0;
+
+        t2 = hour.get(1);
+        t1 = hour.get(0);
+        String msg = "Clock out must be a later time than clock in.";
 
         if (t2 > t1) {
-            t3 += t2 - t1;
+            t3 = t2 - t1;
+        } else {
+            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
         }
+        h = t3;
 
-        return t3;
+        return h;
 
     }
 
@@ -243,13 +225,13 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
         }
 
 
-        if (MainActivity.employees.get(MainActivity.size).getDate() == null) {
-            MainActivity.employees.get(MainActivity.size).setDate(date);
+        if (employeeSingleton.getDate() == null) {
+            employeeSingleton.setDate(date);
         } else {
-            MainActivity.employees.get(MainActivity.size).setSingleDate(dateSet);
+            employeeSingleton.setSingleDate(dateSet);
         }
 
-        Log.i("Dates from object: ", String.valueOf(MainActivity.employees.get(MainActivity.size).getDate()));
+        Log.i("Dates from object: ", String.valueOf(employeeSingleton.getDate()));
 
     }
 
@@ -273,10 +255,10 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
             clockIn.add(clockInTest);
             int i = clockIn.indexOf(clockInTest);
 
-            if (MainActivity.employees.get(MainActivity.size).getClockIn() == null) {
-                MainActivity.employees.get(MainActivity.size).setClockIn(clockIn);
+            if (employeeSingleton.getClockIn() == null) {
+                employeeSingleton.setClockIn(clockIn);
             } else {
-                MainActivity.employees.get(MainActivity.size).setSingleClockIn(clockIn.get(i));
+                employeeSingleton.setSingleClockIn(clockIn.get(i));
             }
         }
 
@@ -284,10 +266,10 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
             clockOut.add(clockOutTest);
             int j = clockOut.indexOf(clockOutTest);
 
-            if (MainActivity.employees.get(MainActivity.size).getClockOut() == null) {
-                MainActivity.employees.get(MainActivity.size).setClockOut(clockOut);
+            if (employeeSingleton.getClockOut() == null) {
+                employeeSingleton.setClockOut(clockOut);
             } else {
-                MainActivity.employees.get(MainActivity.size).setSingleClockOut(clockOut.get(j));
+                employeeSingleton.setSingleClockOut(clockOut.get(j));
             }
 
         }
@@ -299,8 +281,8 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
             Log.i("Clock Out: ", String.valueOf(clockOut));
         }
 
-        Log.i("ClockIn from object: ", String.valueOf(MainActivity.employees.get(MainActivity.size).getClockIn()));
-        Log.i("ClockOut from object: ", String.valueOf(MainActivity.employees.get(MainActivity.size).getClockOut()));
+        Log.i("ClockIn from object: ", String.valueOf(employeeSingleton.getClockIn()));
+        Log.i("ClockOut from object: ", String.valueOf(employeeSingleton.getClockOut()));
 
     }
 
