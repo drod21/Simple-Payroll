@@ -12,7 +12,6 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -121,15 +120,6 @@ class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_DATE, dateInputString);
         values.put(KEY_CLOCK_IN, clockInInputString);
         values.put(KEY_CLOCK_OUT, clockOutInputString);
-        Log.i("Date from Gson: ", dateInputString);
-        /*values.put(KEY_DATE, String.valueOf(employee.getDate()));
-        values.put(KEY_CLOCK_IN, String.valueOf(employee.getClockIn()));
-        values.put(KEY_CLOCK_OUT, String.valueOf(employee.getClockOut()));*/
-        /*for (int i = 0; i < employee.getDate().size(); i++) {
-            values.put(KEY_DATE, dates.get(i));
-            values.put(KEY_CLOCK_IN, clockIns.get(i));
-            values.put(KEY_CLOCK_OUT, clockOuts.get(i));
-        }*/
         values.put(KEY_HOURS, hoursWorkedGson);
 
         if (!dbHasData(TABLE_EMPLOYEE, KEY_NAME, employee.getName())) {
@@ -236,106 +226,28 @@ class DatabaseHandler extends SQLiteOpenHelper {
 
                 Type type = new TypeToken<ArrayList<String>>() {
                 }.getType();
-                Type typeDouble = new TypeToken<ArrayList<Double>>() {
-                }.getType();
 
-
-                dateInputString = gson.toJson(mDate);
-                clockInInputString = gson.toJson(mClockIn);
-                clockOutInputString = gson.toJson(mClockOut);
-                hoursWorkedGson = gson.toJson(hours);
-
-                String[] splitHours = hoursWorkedGson.split("[\\[\\]\\s*, \"]");
-                String hrReplace = "";
-                for (String splitHr : splitHours) {
-                    hrReplace += splitHr;
-                }
-                Log.i("hr split ", String.valueOf(splitHours));
-                // String []splitHr2 = hrReplace.split(",");
-
-                String replace1;
-                String replace2 = "";
-                String replClockIn = "";
-
-                String[] splitDate = dateInputString.split("[\\[\\]\\s*, \"]");
-
-                for (String aSplitDate : splitDate) {
-                    replace2 += aSplitDate;
-                }
-                replace1 = replace2.replaceAll("\\\\", ",");
-
-                String[] splitClockIn = clockInInputString.split("[\\[\\]\\s*, \"]");
-                for (String aSplitClockIn : splitClockIn) {
-                    replClockIn += aSplitClockIn;
+                ArrayList<String> dateGsonString = gson.fromJson(mDate, type);
+                ArrayList<String> clockInGsonString = gson.fromJson(mClockIn, type);
+                ArrayList<String> clockOutGsonString = gson.fromJson(mClockOut, type);
+                ArrayList<String> hoursGsonString = gson.fromJson(hours, type);
+                for (String s : hoursGsonString) {
+                    Log.i("gson string ", s);
                 }
 
-                String replClockIn2 = replClockIn.replaceAll("\\\\", ",");
-                String[] splitClockIn2 = replClockIn2.split(",");
-
-                String[] splitClockOut = clockOutInputString.split("[\\[\\]\\s*, \"]");
-                String replClockOut = "";
-
-                for (String aSplitClockOut : splitClockOut) {
-                    replClockOut += aSplitClockOut;
+                ArrayList<Double> hoursWorkedList = new ArrayList<>();
+                for (String s : hoursGsonString) {
+                    hoursWorkedList.add(Double.parseDouble(s));
                 }
-                String replClockOut2 = replClockOut.replaceAll("\\\\", ",");
-                String[] splitClockOut2 = replClockOut2.split(",");
-
-                String[] splitDate2 = replace1.split(",");
-
-                List<String> dateSplit = Arrays.asList(splitDate2);
-                List<String> clockInSplit = Arrays.asList(splitClockIn2);
-
-                List<String> hoursSplit = Arrays.asList(splitHours);
-                List<String> clockOutSplit = Arrays.asList(splitClockOut2);
-
-                ArrayList<String> date = new ArrayList<>();
-                ArrayList<String> clockIn = new ArrayList<>();
-                ArrayList<String> clockOut = new ArrayList<>();
-                ArrayList<Double> hour = new ArrayList<>();
-
-                String dateJson = gson.toJson(dateSplit, type);
-                String clockInJson = gson.toJson(clockInSplit, type);
-                String clockOutJson = gson.toJson(clockOutSplit, type);
-                String hoursJson = gson.toJson(hoursSplit, type);
-
-                for (String s : hoursSplit) {
-                    if (!s.isEmpty()) {
-                        hour.add(Double.parseDouble(s));
-                        Log.i("Hr split: ", s);
-                    }
-                }
-
-                for (String s : dateSplit) {
-                    if (!s.isEmpty()) {
-                        date.add(s);
-                    }
-                }
-
-                for (String s : clockInSplit) {
-                    if (!s.isEmpty()) {
-                        clockIn.add(s);
-                    }
-                }
-                for (String s : clockOutSplit) {
-                    if (!s.isEmpty()) {
-                        clockOut.add(s);
-                    }
-                }
-
-                // hoursWorked = gson.fromJson(hoursWorkedGson, typeDouble);
-                dates = gson.fromJson(dateJson, type);
-                clockIns = gson.fromJson(clockInJson, type);
-                clockOuts = gson.fromJson(clockOutJson, type);
 
                 try {
-                    employee = new EmployeeBuilder().setId(id).setName(name).setRateOfPay(payRate).setDate(date).setClockIn(clockIn).setClockOut(clockOut).setHoursWorked(hour).createEmployee();
+                    employee = new EmployeeBuilder().setId(id).setName(name).setRateOfPay(payRate).setDate(dateGsonString).setClockIn(clockInGsonString).setClockOut(clockOutGsonString).setHoursWorked(hoursWorkedList).createEmployee();
                     employeeList.add(employee);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                String log = "Date: " + String.valueOf(date) + " , Clock in: " + String.valueOf(clockIn) +
-                        " , Clock out: " + String.valueOf(clockOut);
+                String log = "Date: " + String.valueOf(dateGsonString) + " , Clock in: " + String.valueOf(clockInGsonString) +
+                        " , Clock out: " + String.valueOf(clockOutGsonString) + " , Hours Worked: " + String.valueOf(hoursWorkedList);
                 Log.i("Json conversion: ", log);
 
                 // Adding employee to list
