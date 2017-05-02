@@ -8,12 +8,13 @@ import java.util.ArrayList;
 
 public class Employee {
 
+    /* TODO: Possibly need to get rid of ArrayLists... Explore options */
+
+
     private String employeeName;
     private String dayOfWeek;
     private String monthOfYear;
     private String year;
-
-    /* TODO: Possibly need to get rid of ArrayLists... Explore options */
 
     private ArrayList<String> clockIn;
     private ArrayList<String> clockOut;
@@ -23,7 +24,8 @@ public class Employee {
     private double minutes;
     private double weekPay;
     private double payRate;
-    private double hoursWorked;
+    private ArrayList<Double> hoursWorked;
+    private double totalHoursWorked;
     private double totalPay;
 
     private int id;
@@ -38,7 +40,10 @@ public class Employee {
 
     }
 
-    public Employee(int id, String name, double rateOfPay, ArrayList<String> date, ArrayList<String> clockIn, ArrayList<String> clockOut, double hoursWorked) {
+    public Employee(
+            int id, String name, double rateOfPay, ArrayList<String> date,
+            ArrayList<String> clockIn, ArrayList<String> clockOut,
+            ArrayList<Double> hoursWorked) {
 
         this.id = id;
         this.employeeName = name;
@@ -46,17 +51,20 @@ public class Employee {
         this.date = date;
         this.clockIn = clockIn;
         this.clockOut = clockOut;
-        this.hoursWorked += hoursWorked;
+        this.hoursWorked = hoursWorked;
     }
 
-    public Employee(String name, double rateOfPay, ArrayList<String> date, ArrayList<String> clockIn, ArrayList<String> clockOut, double hoursWorked) {
+    public Employee(
+            String name, double rateOfPay, ArrayList<String> date,
+            ArrayList<String> clockIn, ArrayList<String> clockOut,
+            ArrayList<Double> hoursWorked) {
 
         this.employeeName = name;
         this.payRate = rateOfPay;
         this.date = date;
         this.clockIn = clockIn;
         this.clockOut = clockOut;
-        this.hoursWorked += hoursWorked;
+        this.hoursWorked = hoursWorked;
 
     }
 
@@ -97,9 +105,9 @@ public class Employee {
 
     }
 
-    public void setHoursWorked(double hoursWorked) {
+    public void setHoursWorked(ArrayList<Double> hoursWorked) {
 
-        this.hoursWorked += hoursWorked;
+        this.hoursWorked = hoursWorked;
 
     }
 
@@ -143,7 +151,7 @@ public class Employee {
 
     public void setWeekPay(double hours, double rate) {
 
-        hours = getHoursWorked();
+        hours = getTotalHoursWorked();
 
         rate = getPayRate();
 
@@ -157,74 +165,84 @@ public class Employee {
 
     public int getId() {
 
-        return id;
+        return this.id;
 
     }
 
     public double getWeekPay() {
 
-        return weekPay;
+        return this.weekPay;
 
     }
 
     public String getDayOfWeek() {
 
-        return dayOfWeek;
+        return this.dayOfWeek;
 
     }
 
     public String getMonthOfYear() {
 
-        return monthOfYear;
+        return this.monthOfYear;
 
     }
 
     public String getYear() {
 
-        return year;
+        return this.year;
 
     }
 
     public String getEmployeeName() {
 
-        return employeeName;
+        return this.employeeName;
 
     }
 
-    public double getHoursWorked() {
+    public ArrayList<Double> getHoursWorked() {
 
-        return hoursWorked;
+        return this.hoursWorked;
 
     }
 
     public double getPayRate() {
 
-        return payRate;
+        return this.payRate;
 
     }
 
     public double getMinutes() {
-        return minutes;
+        return this.minutes;
     }
 
 
     public double getHours() {
-        return hours;
+        return this.hours;
     }
 
 
     public ArrayList<String> getDate() {
-        return date;
+        return this.date;
     }
 
 
     public ArrayList<String> getClockOut() {
-        return clockOut;
+        return this.clockOut;
     }
 
 
     public ArrayList<String> getClockIn() {
-        return clockIn;
+        return this.clockIn;
+    }
+
+    public double getTotalHoursWorked() {
+        return totalHoursWorked;
+    }
+
+    public void setTotalHoursWorked(double totalHoursWorked) {
+        for (double hour : hoursWorked) {
+            this.totalHoursWorked += hour;
+        }
     }
 
 
