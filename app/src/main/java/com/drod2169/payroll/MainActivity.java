@@ -2,7 +2,6 @@ package com.drod2169.payroll;
 
 
 import android.app.ActionBar;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -17,7 +16,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,18 +31,14 @@ public class MainActivity extends AppCompatActivity {
 
      */
 
-    static SQLiteDatabase myDatabase;
-
-    Button setName;
-    Button setPay;
-    Button weekPay;
-
+    EmployeeSingleton employeeSingleton = EmployeeSingleton.getInstance();
+    EmployeeSingleton employeeSingleton1 = EmployeeSingleton.getInstance();
+    //EmployeeBuilder employeeBuilder = new EmployeeBuilder();
     private static DecimalFormat df = new DecimalFormat(".##");
-    public static Employee employee = new Employee();
+
     static List<Employee> employees = new ArrayList<>();
-    private Toolbar toolbar;
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
+
+
     static String empName;
     static double payHourly;
 
@@ -53,11 +47,8 @@ public class MainActivity extends AppCompatActivity {
     static EditText name;
     static EditText payRate;
 
-    // action bar
-    private ActionBar actionBar;
-
     // Refresh menu item
-    private MenuItem refreshMenuItem;
+    //private MenuItem refreshMenuItem;
     DatabaseHandler db = new DatabaseHandler(this);
 
     public void setName(View view) {
@@ -68,39 +59,55 @@ public class MainActivity extends AppCompatActivity {
         empName = name.getText().toString();
 
         boolean found = false;
-
-        for (Employee emp1 : employees) {
-
-            if (Objects.equals(empName, emp1.getEmployeeName())) {
-                employee = emp1;
+        int i;
+        int count = 0;
+        for (i = 0; i < employees.size(); i++) {
+            if (Objects.equals(empName, employees.get(i).getEmployeeName())) {
+                count = i;
                 found = true;
+                break;
             }
+        }
+
+
+        if (employees.size() <= 1) {
+            size = 0;
+        } else {
+            size = count;
+            Log.i("Size ", String.valueOf(i));
         }
 
         if (found) {
             setPayRateView();
+            EmployeeSingleton.getInstance().setId(employees.get(size).getId());
+            EmployeeSingleton.getInstance().setName(employees.get(size).getEmployeeName());
+            EmployeeSingleton.getInstance().setPayRate(employees.get(size).getPayRate());
+            EmployeeSingleton.getInstance().setDate(employees.get(size).getDate());
+            EmployeeSingleton.getInstance().setClockIn(employees.get(size).getClockIn());
+            EmployeeSingleton.getInstance().setClockOut(employees.get(size).getClockOut());
+            EmployeeSingleton.getInstance().setWorkedHours(employees.get(size).getHoursWorked());
         }
 
         if (!found) {
-            Employee emp = new Employee();
-            emp.setEmployeeName(empName);
 
-            employees.add(emp);
+            EmployeeSingleton.getInstance().setName(empName);
 
+            EmployeeSingleton.getInstance().setId(size);
 
-            emp.setID(size);
+            TwoFragment.updateListView(EmployeeSingleton.getInstance().getName());
+
         }
-        for (Employee emps : employees) {
+
+        Log.i("Singleton ", EmployeeSingleton.getInstance().getName());
+        /*for (Employee emps : employees) {
             Log.i("Employee: ", emps.getEmployeeName());
             Log.i("Employee ID ", String.valueOf(emps.getId()));
         }
-        Log.i("Employee name: ", employees.get(size).getEmployeeName());
-        Log.i("Employee id: ", String.valueOf(employee.getId()));
 
 
         Log.i("ID " + employees.get(size).getId() + " Employee: ", employees.get(size).getEmployeeName() + " Date: " + String.valueOf(employees.get(size).getDate())
                 + " Clock In: " + String.valueOf(employees.get(size).getClockIn()) + " Clock Out: " + String.valueOf(employees.get(size).getClockOut()));
-
+*/
     }
 
 
@@ -115,14 +122,26 @@ public class MainActivity extends AppCompatActivity {
 */
         payHourly = Double.parseDouble(payRate.getText().toString());
 
-        if (employees.get(size).getPayRate() == 0) {
+
+        //use employeeSingleton
+        employeeSingleton.setPayRate(payHourly);
+        Log.i("Pay rate ", String.valueOf(employeeSingleton.getPayRate()));
+
+
+       /* if (employeeSingleton.getPayRate() == 0.0) {
+            employeeSingleton.setPayRate(payHourly);
+        } else {
+            employeeSingleton1.setPayRate(payHourly);
+        }
+*/
+        /*if (employees.get(size).getPayRate() == 0) {
             employees.get(size).setPayRate(payHourly);
         } else {
             employees.get(size).setPayRate(payHourly);
             payRate.setText(String.valueOf(employees.get(size).getPayRate()));
         }
         Log.i("Employee pay rate: ", String.valueOf(employees.get(size).getPayRate()));
-
+*/
     }
 
     public void setPayRateView() {
@@ -140,18 +159,17 @@ public class MainActivity extends AppCompatActivity {
         // employee.setHoursWorked(hoursWorked);
 
 
-        employee.setWeekPay(employee.getHoursWorked(), Double.parseDouble(payRate.getText().toString()));
-        Log.i("Week pay: ", String.valueOf(employee.getWeekPay()));
-        Log.i("Hours worked: ", String.valueOf(employee.getHoursWorked()));
-        Log.i("Pay rate: ", String.valueOf(employee.getPayRate()));
+        employees.get(size).setWeekPay(employees.get(size).getTotalHoursWorked(), Double.parseDouble(payRate.getText().toString()));
+        Log.i("Week pay: ", String.valueOf(employees.get(size).getWeekPay()));
+        Log.i("Hours worked: ", String.valueOf(employees.get(size).getHoursWorked()));
+        Log.i("Pay rate: ", String.valueOf(employees.get(size).getPayRate()));
 
-        totalPay = employee.getWeekPay();
+        totalPay = employees.get(size).getWeekPay();
 
         TextView payText = (TextView) findViewById(R.id.pay);
-        payText.setText(new StringBuilder().append("$").append(String.valueOf(df.format(totalPay))).toString());
+        payText.setText(String.format("$%s", String.valueOf(df.format(totalPay))));
 
         Toast.makeText(getApplicationContext(), "$" + df.format(totalPay), Toast.LENGTH_SHORT).show();
-
 
     }
 
@@ -162,35 +180,19 @@ public class MainActivity extends AppCompatActivity {
 
         employees = db.getAllEmployees();
 
-        int i = 0;
-
-        for (Employee emp1 : employees) {
-
-            if (Objects.equals(empName, emp1.getEmployeeName())) {
-
-                break;
-
-            }
-            i++;
-        }
-
-        if (employees.size() <= 1) {
-            size = 0;
-        } else {
-            size = i;
-        }
-
-        actionBar = getActionBar();
+        ActionBar actionBar = getActionBar();
 
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
 
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
 
@@ -223,11 +225,11 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
     }
 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
+    private class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
-        public ViewPagerAdapter(FragmentManager manager) {
+        ViewPagerAdapter(FragmentManager manager) {
             super(manager);
         }
 
@@ -241,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
             return mFragmentList.size();
         }
 
-        public void addFrag(Fragment fragment, String title) {
+        void addFrag(Fragment fragment, String title) {
             mFragmentList.add(fragment);
             mFragmentTitleList.add(title);
         }
