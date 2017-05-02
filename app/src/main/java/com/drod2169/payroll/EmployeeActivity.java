@@ -3,6 +3,7 @@ package com.drod2169.payroll;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TableLayout;
@@ -15,13 +16,11 @@ public class EmployeeActivity extends AppCompatActivity {
     int empId;
     Employee employee;
 
-    private TableLayout tableLayout;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.table);
-        tableLayout = (TableLayout) findViewById(R.id.tableLayout);
+        TableLayout tableLayout = (TableLayout) findViewById(R.id.tableLayout);
 
         //ListView listView = (ListView) findViewById(R.id.employee_list_view);
         //listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_2));
@@ -32,6 +31,7 @@ public class EmployeeActivity extends AppCompatActivity {
         if (empId != -1) {
 
             employee = TwoFragment.employees.get(empId);
+            Log.i("emp id ", String.valueOf(empId));
             //Collections.sort((List<Comparable>) employee);
 
         } else {
@@ -43,8 +43,8 @@ public class EmployeeActivity extends AppCompatActivity {
         }
 
 
-        for (int i = 0; i < employee.getDate().size(); i++) {
-            View tableRow = LayoutInflater.from(this).inflate(R.layout.table_item, null, false);
+        for (int i = 0; i < employee.getClockIn().size(); i++) {
+            View tableRow = LayoutInflater.from(this).inflate(R.layout.table_item, tableLayout, false);
             TextView empNameText = (TextView) tableRow.findViewById(R.id.emp_name_list);
             TextView empPayRateText = (TextView) tableRow.findViewById(R.id.emp_pay_rate_list);
             TextView empDateText = (TextView) tableRow.findViewById(R.id.emp_date_list);
@@ -54,12 +54,12 @@ public class EmployeeActivity extends AppCompatActivity {
 
             empNameText.setText(employee.getEmployeeName());
             empPayRateText.setText(String.valueOf(employee.getPayRate()));
-            for (int j = 0; j < employee.getDate().size(); j++) {
-                empDateText.setText(employee.getDate().get(i));
-                empClockInText.setText(employee.getClockIn().get(i));
-                empClockOutText.setText(employee.getClockOut().get(i));
-            }
-            empHoursText.setText(String.valueOf(employee.getHoursWorked()));
+
+            empDateText.setText(employee.getDate().get(i));
+            empClockInText.setText(employee.getClockIn().get(i));
+            empClockOutText.setText(employee.getClockOut().get(i));
+
+            empHoursText.setText(String.valueOf(employee.getHoursWorked().get(i)));
 
             tableLayout.addView(tableRow);
             TwoFragment.arrayAdapter.notifyDataSetChanged();
