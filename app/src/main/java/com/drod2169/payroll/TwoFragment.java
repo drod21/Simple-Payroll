@@ -24,8 +24,9 @@ public class TwoFragment extends android.support.v4.app.Fragment {
     static ArrayAdapter<String> arrayAdapter;
     static ArrayList<Employee> employees = new ArrayList<>();
     static ArrayList<String> results = new ArrayList<String>();
+    static final List<String> values = new ArrayList<String>();
 
-    ListView listView;
+    static ListView listView;
 
     public TwoFragment() {
 
@@ -49,7 +50,7 @@ public class TwoFragment extends android.support.v4.app.Fragment {
             employees = (ArrayList<Employee>) databaseHandler.getAllEmployees();
 
             String name;
-            final List<String> values = new ArrayList<String>();
+
             for (Employee emps : employees) {
 
                 name = emps.getEmployeeName();
@@ -69,10 +70,10 @@ public class TwoFragment extends android.support.v4.app.Fragment {
             for (Employee emp : employees) {
                 String log = "Id: " + emp.getId() + " , Name: " + emp.getEmployeeName() + " , Pay Rate: " +
                         emp.getPayRate() + " , Dates: " + emp.getDate() + " , Clock In: " +
-                        emp.getClockIn() + " , Clock Out: " + emp.getClockOut();
+                        emp.getClockIn() + " , Clock Out: " + emp.getClockOut() + " , Hours Worked: " + emp.getHoursWorked();
                 //MainActivity.employee.setID(emp.getId());
                 // Write to the log
-                Log.i("DB: ", log);
+                Log.i("DB from TwoFrag: ", log);
             }
 
             arrayAdapter = new ArrayAdapter<>(getActivity(), simple_list_item_1, values);
@@ -112,6 +113,9 @@ public class TwoFragment extends android.support.v4.app.Fragment {
                                     Log.i("Employee to delete: ", employees.get(itemToDelete).getEmployeeName());
                                     db.deleteEmployee(employees.get(itemToDelete));
                                     values.remove(itemToDelete);
+                                    if (EmployeeSingleton.getInstance() != null) {
+                                        EmployeeSingleton.resetInstance();
+                                    }
                                     employees.remove(itemToDelete);
                                     arrayAdapter.notifyDataSetChanged();
                                 }
@@ -135,4 +139,13 @@ public class TwoFragment extends android.support.v4.app.Fragment {
 
     }
 
+
+    static public void updateListView(String name) {
+
+        values.add(name);
+        arrayAdapter.add(name);
+        listView.setAdapter(arrayAdapter);
+        arrayAdapter.setNotifyOnChange(true);
+
+    }
 }
