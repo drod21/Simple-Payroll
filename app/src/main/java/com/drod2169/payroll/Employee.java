@@ -26,6 +26,7 @@ public class Employee {
     private double payRate;
     private ArrayList<Double> hoursWorked;
     private double totalHoursWorked;
+    private double overTimeHours;
     private double totalPay;
 
     private int id;
@@ -149,6 +150,14 @@ public class Employee {
         this.hours += hours;
     }
 
+    public void setTotalHoursWorked(double totalHoursWorked) {
+        this.totalHoursWorked = totalHoursWorked;
+    }
+
+    public void setOverTimeHours(double overTimeHours) {
+        this.overTimeHours = overTimeHours;
+    }
+
     public void setWeekPay(double hours, double rate) {
 
         hours = getTotalHoursWorked();
@@ -226,23 +235,28 @@ public class Employee {
     }
 
 
-    public ArrayList<String> getClockOut() {
+    ArrayList<String> getClockOut() {
         return this.clockOut;
     }
 
 
-    public ArrayList<String> getClockIn() {
+    ArrayList<String> getClockIn() {
         return this.clockIn;
     }
 
-    public double getTotalHoursWorked() {
-        return totalHoursWorked;
+    double getTotalHoursWorked() {
+        for (double hour : hoursWorked) {
+            if (this.totalHoursWorked <= 40.0) {
+                this.totalHoursWorked += hour;
+            } else if (this.totalHoursWorked > 40.0) {
+                this.overTimeHours += hour;
+            }
+        }
+        return this.totalHoursWorked;
     }
 
-    public void setTotalHoursWorked(double totalHoursWorked) {
-        for (double hour : hoursWorked) {
-            this.totalHoursWorked += hour;
-        }
+    public double getOverTimeHours() {
+        return overTimeHours;
     }
 
 

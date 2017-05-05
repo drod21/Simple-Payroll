@@ -44,8 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static int size;
 
-    static EditText name;
-    static EditText payRate;
+    EditText name;
+    EditText payRate;
 
     // Refresh menu item
     //private MenuItem refreshMenuItem;
@@ -54,9 +54,26 @@ public class MainActivity extends AppCompatActivity {
     public void setName(View view) {
 
 
+
         name = (EditText) findViewById(R.id.empName);
 
         empName = name.getText().toString();
+
+        findEmployee();
+
+        /*for (Employee emps : employees) {
+            Log.i("Employee: ", emps.getEmployeeName());
+            Log.i("Employee ID ", String.valueOf(emps.getId()));
+        }
+
+
+        Log.i("ID " + employees.get(size).getId() + " Employee: ", employees.get(size).getEmployeeName() + " Date: " + String.valueOf(employees.get(size).getDate())
+                + " Clock In: " + String.valueOf(employees.get(size).getClockIn()) + " Clock Out: " + String.valueOf(employees.get(size).getClockOut()));
+*/
+    }
+
+    public void findEmployee() {
+
 
         boolean found = false;
         int i;
@@ -99,15 +116,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Log.i("Singleton ", EmployeeSingleton.getInstance().getName());
-        /*for (Employee emps : employees) {
-            Log.i("Employee: ", emps.getEmployeeName());
-            Log.i("Employee ID ", String.valueOf(emps.getId()));
-        }
 
-
-        Log.i("ID " + employees.get(size).getId() + " Employee: ", employees.get(size).getEmployeeName() + " Date: " + String.valueOf(employees.get(size).getDate())
-                + " Clock In: " + String.valueOf(employees.get(size).getClockIn()) + " Clock Out: " + String.valueOf(employees.get(size).getClockOut()));
-*/
     }
 
 
@@ -159,9 +168,9 @@ public class MainActivity extends AppCompatActivity {
         // employee.setHoursWorked(hoursWorked);
 
 
-        employees.get(size).setWeekPay(employees.get(size).getTotalHoursWorked(), Double.parseDouble(payRate.getText().toString()));
+        employees.get(size).setWeekPay(employees.get(size).getTotalHoursWorked(), employees.get(size).getPayRate());
         Log.i("Week pay: ", String.valueOf(employees.get(size).getWeekPay()));
-        Log.i("Hours worked: ", String.valueOf(employees.get(size).getHoursWorked()));
+        Log.i("Hours worked: ", String.valueOf(employees.get(size).getTotalHoursWorked()));
         Log.i("Pay rate: ", String.valueOf(employees.get(size).getPayRate()));
 
         totalPay = employees.get(size).getWeekPay();

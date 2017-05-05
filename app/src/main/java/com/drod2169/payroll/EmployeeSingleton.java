@@ -18,6 +18,7 @@ public class EmployeeSingleton extends Application {
     private ArrayList<String> clockOut;
     private ArrayList<Double> workedHours;
     private double totalHours;
+    private double overTimeHours;
 
     private static volatile EmployeeSingleton instance;
 
@@ -34,7 +35,6 @@ public class EmployeeSingleton extends Application {
         // Return the instance
         return instance;
     }
-
 
     synchronized static void resetInstance() {
         instance = new EmployeeSingleton();
@@ -113,13 +113,21 @@ public class EmployeeSingleton extends Application {
     }
 
     public double getTotalHours() {
+        for (double hour : workedHours) {
+            if (this.totalHours <= 40.0) {
+                this.totalHours += hour;
+            } else if (this.totalHours > 40.0) {
+                this.overTimeHours += hour;
+            }
+        }
         return totalHours;
     }
 
-    public void setTotalHours(double totalHours) {
+    public double getOverTimeHours() {
+        return overTimeHours;
+    }
 
-        for (double hour : workedHours) {
-            this.totalHours += hour;
-        }
+    public void setOverTimeHours(double overTimeHours) {
+        this.overTimeHours = overTimeHours;
     }
 }
