@@ -16,7 +16,8 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="51dp"
         android:layout_marginTop="33dp"
-        android:text="Name Goes Here" />
+        android:text="@string/name_ph"
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/emp_pay_rate"
@@ -25,7 +26,8 @@
         android:layout_alignEnd="@+id/emp_name"
         android:layout_below="@+id/emp_name"
         android:layout_marginTop="47dp"
-        android:text="Pay Rate Goes Here" />
+        android:text="@string/pay_rate"
+        android:inputType="numberDecimal" />
 
     <EditText
         android:id="@+id/emp_dates"
@@ -35,16 +37,19 @@
         android:layout_marginTop="32dp"
         android:text=""
         android:layout_below="@+id/emp_pay_rate"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:inputType="date" />
 
     <EditText
         android:id="@+id/emp_hours"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="119dp"
-        android:text="Hours Worked Goes Here"
+        android:text="@string/hours"
+        android:labelFor="@+id/emp_hours"
         android:layout_below="@+id/emp_clock_in"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:inputType="numberDecimal" />
 
     <EditText
         android:id="@+id/emp_clock_in"
@@ -53,7 +58,8 @@
         android:layout_marginTop="32dp"
         android:text=""
         android:layout_below="@+id/emp_dates"
-        android:layout_alignStart="@+id/emp_dates" />
+        android:layout_alignStart="@+id/emp_dates"
+        android:inputType="time" />
 
     <EditText
         android:id="@+id/emp_clock_out"
@@ -63,5 +69,6 @@
         android:text=""
         android:layout_alignBaseline="@+id/emp_clock_in"
         android:layout_alignBottom="@+id/emp_clock_in"
-        android:layout_toEndOf="@+id/emp_dates" />
+        android:layout_toEndOf="@+id/emp_dates"
+        android:inputType="time" />
 </RelativeLayout>
