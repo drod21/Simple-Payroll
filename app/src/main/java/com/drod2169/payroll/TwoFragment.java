@@ -56,7 +56,6 @@ public class TwoFragment extends android.support.v4.app.Fragment {
                 name = emps.getEmployeeName();
 
                 values.add(name);
-                //Collections.sort(values);
 
             }
 

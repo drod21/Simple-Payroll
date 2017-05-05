@@ -67,34 +67,18 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
             AMPM = "PM";
         }
 
-        int currentHour;
 
-        if (hourOfDay > 11) {
-
-            currentHour = hourOfDay - 12;
-
-        } else {
-
-            currentHour = hourOfDay;
-
-        }
         //Do something with the user chosen time
         //Get reference of host activity (XML Layout File) TextView widget
         TextView tv = (TextView) getActivity().findViewById(R.id.in_time);
         TextView tv2 = (TextView) getActivity().findViewById(R.id.out_time);
         //Display the user changed time on TextView
 
-        // Temp hack to get minutes showing correctly with leading zero
 
-        if (minute < 10) {
+        String hourString = hourOfDay > 11 ? String.valueOf(hourOfDay - 12) : "" + hourOfDay;
+        String minuteString = minute < 10 ? "0" + minute : "" + minute;
 
-            time = String.valueOf(currentHour) + ":" + "0" + String.valueOf(minute) + " " + AMPM;
-
-        } else {
-
-            time = String.valueOf(currentHour) + ":" + String.valueOf(minute) + " " + AMPM;
-
-        }
+        time = hourString + ":" + minuteString + " " + AMPM;
 
         clockIn = tv.getText().toString();
         clockOut = tv2.getText().toString();
