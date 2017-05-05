@@ -66,9 +66,12 @@ public class OneFragment extends Fragment {
         }
 
         EditText hours = (EditText) rootView.findViewById(R.id.hours_worked);
-        hours.setText(String.valueOf(hours_final));
+
         EmployeeSingleton.getInstance().setSingleWorkedHours(hours_final);
-        Log.i("Hours worked: ", String.valueOf(EmployeeSingleton.getInstance().getWorkedHours()));
+        String totalHours = String.valueOf(EmployeeSingleton.getInstance().getTotalHours());
+
+        hours.setText(totalHours);
+        Log.i("Hours worked: ", totalHours);
 
     }
 
