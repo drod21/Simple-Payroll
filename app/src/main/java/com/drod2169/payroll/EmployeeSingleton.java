@@ -2,6 +2,7 @@ package com.drod2169.payroll;
 
 import android.app.Application;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -113,11 +114,12 @@ public class EmployeeSingleton extends Application {
     }
 
     public double getTotalHours() {
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
         for (double hour : workedHours) {
             if (this.totalHours <= 40.0) {
-                this.totalHours += hour;
+                this.totalHours += Double.valueOf(decimalFormat.format(hour));
             } else if (this.totalHours > 40.0) {
-                this.overTimeHours += hour;
+                this.overTimeHours += Double.valueOf(decimalFormat.format(hour));
             }
         }
         return totalHours;

@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.text.DecimalFormat;
+
 import static android.app.Activity.RESULT_OK;
 
 
@@ -68,9 +70,11 @@ public class OneFragment extends Fragment {
         EditText hours = (EditText) rootView.findViewById(R.id.hours_worked);
 
         EmployeeSingleton.getInstance().setSingleWorkedHours(hours_final);
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        Double hrs = Double.valueOf(decimalFormat.format(EmployeeSingleton.getInstance().getTotalHours()));
         String totalHours = String.valueOf(EmployeeSingleton.getInstance().getTotalHours());
 
-        hours.setText(totalHours);
+        hours.setText(String.valueOf(hrs));
         Log.i("Hours worked: ", totalHours);
 
     }

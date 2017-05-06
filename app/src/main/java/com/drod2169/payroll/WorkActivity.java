@@ -12,12 +12,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 
 public class WorkActivity extends AppCompatActivity implements View.OnClickListener, DatePickerFragment.onDateSelectedListener, TimePickerFragment.onTimeSelectedListener {
@@ -51,7 +48,6 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
 
     ArrayList<String> clockIn = new ArrayList<>();
     ArrayList<String> clockOut = new ArrayList<>();
-    ArrayList<Date> timedate = new ArrayList<>();
     ArrayList<String> date = new ArrayList<>();
     ArrayList<Integer> hour = new ArrayList<>();
     ArrayList<Integer> minute = new ArrayList<>();
@@ -62,7 +58,6 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_work);
-        EmployeeSingleton empSingleton = (EmployeeSingleton) getApplicationContext();
 
         btnDatePicker = (Button) findViewById(R.id.btn_date);
         btnClockInPicker = (Button) findViewById(R.id.btn_clock_in);
@@ -76,13 +71,9 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    public void finalHours(View v) {
-
-        int i;
-
-        double hoursFinal = 0.0;
-
-        Date t;
+    public void getHoursFinal() {
+        double hour;
+        double hoursFinal;
 
         int hoursTime, minutesTime;
 
@@ -93,7 +84,9 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
         Log.i("Hours subtracted new: ", String.valueOf(hoursTime));
         Log.i("Minute subtracted new: ", String.valueOf(minutesTime));
 
-        hoursFinal = (double) hoursTime + ((double) minutesTime / 100);
+        hour = (double) hoursTime + ((double) minutesTime / 100);
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        hoursFinal = Double.valueOf(decimalFormat.format(hour));
         ArrayList<Double> hours = new ArrayList<>();
         hours.add(hoursFinal);
 
@@ -103,48 +96,85 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             EmployeeSingleton.getInstance().setSingleWorkedHours(hoursFinal);
         }
-        //Log.i("Hours worked: ", String.valueOf(employeeSingleton.getWorkedHours()));
 
         Intent output = new Intent();
         output.putExtra(OneFragment.hour_key, hoursFinal);
         setResult(RESULT_OK, output);
 
+    }
+
+    public void addToDb() {
+
+        try {
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+
+                    try {
+                        db.addEmployee(employeeSingleton);
+                        Log.i("Reading: ", "Reading all employees..");
+                        List<Employee> employees = db.getAllEmployees();
+                        for (Employee emp : employees) {
+                            String log = "Id: " + emp.getId() + " , Name: " + emp.getEmployeeName() + " , Pay Rate: " +
+                                    emp.getPayRate() + " , Dates: " + emp.getDate() + " , Clock In: " +
+                                    emp.getClockIn() + " , Clock Out: " + emp.getClockOut() + " , Hours Worked: " + emp.getHoursWorked();
+                            //MainActivity.employee.setID(emp.getId());
+                            // Write to the log
+                            Log.i("DB from WorkActivity ", log);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }).start();
+        } catch (Exception e) {
+            Log.i("Failed to create", " thread");
+            e.printStackTrace();
+
+        }
+    }
+
+
+    public void finalHours(View v) {
+
+        getHoursFinal();
+        addToDb();
+
         Log.i("Time from object: ", String.valueOf(employeeSingleton.getClockIn()));
         Log.i("ClockOut from object: ", String.valueOf(employeeSingleton.getClockOut()));
 
         Log.i("Insert: ", "Inserting..");
-        try {
-
-            db.addEmployee(employeeSingleton);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Log.i("Reading: ", "Reading all employees..");
-        List<Employee> employees = db.getAllEmployees();
-        for (Employee emp : employees) {
-            String log = "Id: " + emp.getId() + " , Name: " + emp.getEmployeeName() + " , Pay Rate: " +
-                    emp.getPayRate() + " , Dates: " + emp.getDate() + " , Clock In: " +
-                    emp.getClockIn() + " , Clock Out: " + emp.getClockOut() + " , Hours Worked: " + emp.getHoursWorked();
-            //MainActivity.employee.setID(emp.getId());
-            // Write to the log
-            Log.i("DB from WorkActivity ", log);
-
-
-        }
-            /*for (i = 0; i < employees.size(); i++) {
-                    Log.i("Deleting: ", "Deleting employees.. " + employees.get(i));
-                    db.deleteEmployee(employees.get(i));
-                }*/
-
 
         finish();
+
+    }
+
+    public void deleteDb() {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                List<Employee> employees = db.getAllEmployees();
+
+                for (int i = 0; i < employees.size(); i++) {
+                    Log.i("Deleting: ", "Deleting employees.. " + employees.get(i));
+                    db.deleteEmployee(employees.get(i));
+                }
+
+            }
+        }).start();
+
 
     }
 
 
     @Override
     public void onClick(View v) {
+
         if (v == btnDatePicker) {
             DialogFragment newFragment = new DatePickerFragment();
             newFragment.show(getFragmentManager(), "datePicker");
@@ -156,22 +186,6 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public Date getTime(String timePicked) {
-
-        Date time = new Date();
-        //String timeNew;
-
-        SimpleDateFormat simpleDateFormat = null;
-        try {
-            time = new SimpleDateFormat("hh:mm", Locale.getDefault()).parse(timePicked);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        Log.i("Timedate: ", String.valueOf(timedate));
-        return time;
-
-    }
 
     public int getMinutes() {
 
