@@ -71,7 +71,6 @@ public class OneFragment extends Fragment {
 
         try {
             if (EmployeeSingleton.getInstance() != null) {
-                EmployeeSingleton.getInstance().setSingleWorkedHours(hours_final);
                 DecimalFormat decimalFormat = new DecimalFormat("#.##");
                 Double hrs = Double.valueOf(decimalFormat.format(EmployeeSingleton.getInstance().getTotalHours()));
                 String totalHours = String.valueOf(EmployeeSingleton.getInstance().getTotalHours());
