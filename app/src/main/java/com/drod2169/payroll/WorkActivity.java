@@ -5,6 +5,7 @@ import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class WorkActivity extends AppCompatActivity implements View.OnClickListener, DatePickerFragment.onDateSelectedListener, TimePickerFragment.onTimeSelectedListener {
@@ -69,6 +71,12 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
         btnClockInPicker.setOnClickListener(this);
         btnClockOutPicker.setOnClickListener(this);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
     }
 
     public void getHoursFinal() {
@@ -105,8 +113,6 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
 
     public void addToDb() {
 
-        try {
-
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -130,11 +136,7 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
                 }
 
             }).start();
-        } catch (Exception e) {
-            Log.i("Failed to create", " thread");
-            e.printStackTrace();
 
-        }
     }
 
 
@@ -242,7 +244,13 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
         if (employeeSingleton.getDate() == null) {
             employeeSingleton.setDate(date);
         } else {
-            employeeSingleton.setSingleDate(dateSet);
+            for (String dates : employeeSingleton.getDate()) {
+                if (!Objects.equals(dates, dateSet)) {
+                    employeeSingleton.setSingleDate(dateSet);
+                } else {
+                    break;
+                }
+            }
         }
 
         Log.i("Dates from object: ", String.valueOf(employeeSingleton.getDate()));
