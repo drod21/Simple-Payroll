@@ -114,14 +114,18 @@ public class EmployeeSingleton extends Application {
     }
 
     public double getTotalHours() {
+        Double totalHr = 0.0;
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         for (double hour : workedHours) {
             if (this.totalHours <= 40.0) {
-                this.totalHours += Double.valueOf(decimalFormat.format(hour));
+                totalHr += Double.valueOf(decimalFormat.format(hour));
             } else if (this.totalHours > 40.0) {
-                this.overTimeHours += Double.valueOf(decimalFormat.format(hour));
+                totalHr += Double.valueOf(decimalFormat.format(hour));
             }
         }
+
+        this.totalHours = Double.valueOf(decimalFormat.format(totalHr));
+
         return totalHours;
     }
 

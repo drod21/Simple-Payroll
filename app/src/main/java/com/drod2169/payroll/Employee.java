@@ -1,5 +1,6 @@
 package com.drod2169.payroll;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -245,13 +246,17 @@ public class Employee {
     }
 
     double getTotalHoursWorked() {
+
+        Double totalHr = 0.0;
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
         for (double hour : hoursWorked) {
             if (this.totalHoursWorked <= 40.0) {
-                this.totalHoursWorked += hour;
+                totalHr += hour;
             } else if (this.totalHoursWorked > 40.0) {
                 this.overTimeHours += hour;
             }
         }
+        this.totalHoursWorked = Double.valueOf(decimalFormat.format(totalHr));
         return this.totalHoursWorked;
     }
 

@@ -1,5 +1,6 @@
 package com.drod2169.payroll;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class EmployeeBuilder {
@@ -71,6 +72,14 @@ public class EmployeeBuilder {
     }
 
     public double getTotalHoursWorked() {
+        Double totalHr = 0.0;
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+
+        for (Double hr : hoursWorked) {
+            totalHr += Double.valueOf(decimalFormat.format(hr));
+        }
+
+        this.totalHoursWorked = Double.valueOf(decimalFormat.format(totalHr));
         return totalHoursWorked;
     }
 
