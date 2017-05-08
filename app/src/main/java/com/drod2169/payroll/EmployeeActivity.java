@@ -44,7 +44,7 @@ public class EmployeeActivity extends AppCompatActivity {
 
         String totalHrsMsg = "Total hours: " + String.valueOf(employee.getTotalHoursWorked());
 
-        for (int i = 0; i < employee.getClockIn().size() && i < employee.getDate().size() && i < employee.getClockOut().size(); i++) {
+        for (int i = 0; i < employee.getClockIn().size() && i < employee.getClockOut().size(); i++) {
             View tableRow = LayoutInflater.from(this).inflate(R.layout.table_item, tableLayout, false);
             TextView empNameText = (TextView) tableRow.findViewById(R.id.emp_name_list);
             TextView empPayRateText = (TextView) tableRow.findViewById(R.id.emp_pay_rate_list);
@@ -57,7 +57,13 @@ public class EmployeeActivity extends AppCompatActivity {
             empNameText.setText(String.valueOf(employee.getId()));
             empPayRateText.setText(String.valueOf(employee.getPayRate()));
 
-            empDateText.setText(employee.getDate().get(i));
+            if (employee.getDate().size() < employee.getClockIn().size()) {
+                for (int j = 0; j < employee.getDate().size(); j++) {
+                    empDateText.setText(employee.getDate().get(j));
+                }
+            } else {
+                empDateText.setText(employee.getDate().get(i));
+            }
             empClockInText.setText(employee.getClockIn().get(i));
             empClockOutText.setText(employee.getClockOut().get(i));
 
