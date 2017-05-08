@@ -53,23 +53,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void setName(View view) {
 
-
-
         name = (EditText) findViewById(R.id.empName);
 
         empName = name.getText().toString();
 
         findEmployee();
 
-        /*for (Employee emps : employees) {
-            Log.i("Employee: ", emps.getEmployeeName());
-            Log.i("Employee ID ", String.valueOf(emps.getId()));
-        }
-
-
-        Log.i("ID " + employees.get(size).getId() + " Employee: ", employees.get(size).getEmployeeName() + " Date: " + String.valueOf(employees.get(size).getDate())
-                + " Clock In: " + String.valueOf(employees.get(size).getClockIn()) + " Clock Out: " + String.valueOf(employees.get(size).getClockOut()));
-*/
     }
 
     public void findEmployee() {
@@ -124,11 +113,6 @@ public class MainActivity extends AppCompatActivity {
 
         payRate = (EditText) findViewById(R.id.payRate);
 
-       /* int size;
-        for (size = 0; size < employees.size(); size++) {
-            if (employees.get(size).getEmployeeName() == )
-        }
-*/
         payHourly = Double.parseDouble(payRate.getText().toString());
 
 
@@ -136,21 +120,6 @@ public class MainActivity extends AppCompatActivity {
         employeeSingleton.setPayRate(payHourly);
         Log.i("Pay rate ", String.valueOf(employeeSingleton.getPayRate()));
 
-
-       /* if (employeeSingleton.getPayRate() == 0.0) {
-            employeeSingleton.setPayRate(payHourly);
-        } else {
-            employeeSingleton1.setPayRate(payHourly);
-        }
-*/
-        /*if (employees.get(size).getPayRate() == 0) {
-            employees.get(size).setPayRate(payHourly);
-        } else {
-            employees.get(size).setPayRate(payHourly);
-            payRate.setText(String.valueOf(employees.get(size).getPayRate()));
-        }
-        Log.i("Employee pay rate: ", String.valueOf(employees.get(size).getPayRate()));
-*/
     }
 
     public void setPayRateView() {
@@ -162,11 +131,6 @@ public class MainActivity extends AppCompatActivity {
     public void pay(View view) {
 
         Double totalPay;
-
-
-        // Double hoursWorked = Double.parseDouble(hours.getText().toString());
-        // employee.setHoursWorked(hoursWorked);
-
 
         employees.get(size).setWeekPay(employees.get(size).getTotalHoursWorked(), employees.get(size).getPayRate());
         Log.i("Week pay: ", String.valueOf(employees.get(size).getWeekPay()));
@@ -220,10 +184,6 @@ public class MainActivity extends AppCompatActivity {
         1st we add the PageChangeListener and pass a TabLayoutPageChangeListener so that Tabs Selection
         changes when a viewpager page changes.
          */
-
-
-
-
 
     }
 
@@ -282,6 +242,21 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 
     @Override
