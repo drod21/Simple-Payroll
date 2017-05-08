@@ -23,10 +23,10 @@ public class TwoFragment extends android.support.v4.app.Fragment {
     DatabaseHandler databaseHandler;
     static ArrayAdapter<String> arrayAdapter;
     static ArrayList<Employee> employees = new ArrayList<>();
-    static ArrayList<String> results = new ArrayList<String>();
+    private ArrayList<String> results;
     static final List<String> values = new ArrayList<String>();
 
-    static ListView listView;
+
 
     public TwoFragment() {
 
@@ -35,13 +35,13 @@ public class TwoFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        ListView listView;
         View view = inflater.inflate(R.layout.fragment_two, container, false);
         listView = (ListView) view.findViewById(R.id.employee_list);
         databaseHandler = new DatabaseHandler(getContext());
@@ -116,6 +116,17 @@ public class TwoFragment extends android.support.v4.app.Fragment {
                                         EmployeeSingleton.resetInstance();
                                     }
                                     employees.remove(itemToDelete);
+                                    MainActivity.employees.remove(itemToDelete);
+                                    for (Employee emp : employees) {
+                                        String log = "Id: " + emp.getId() + " , Name: " + emp.getEmployeeName() + " , Pay Rate: " +
+                                                emp.getPayRate() + " , Dates: " + emp.getDate() + " , Clock In: " +
+                                                emp.getClockIn() + " , Clock Out: " + emp.getClockOut() + " , Hours Worked: " + emp.getHoursWorked();
+                                        //MainActivity.employee.setID(emp.getId());
+                                        // Write to the log
+                                        Log.i("DB from TwoFrag ", log);
+                                    }
+
+
                                     arrayAdapter.notifyDataSetChanged();
                                 }
                             })
@@ -139,12 +150,34 @@ public class TwoFragment extends android.support.v4.app.Fragment {
     }
 
 
-    static public void updateListView(String name) {
+    public static void updateListView(String name) {
 
-        values.add(name);
-        arrayAdapter.add(name);
-        listView.setAdapter(arrayAdapter);
-        arrayAdapter.setNotifyOnChange(true);
+        ArrayList<String> newValues = new ArrayList<>();
+        newValues.add(name);
+        arrayAdapter.addAll(newValues);
+        arrayAdapter.notifyDataSetChanged();
 
+    }
+
+    @Override
+    public void onResume() {
+        employees = (ArrayList<Employee>) databaseHandler.getAllEmployees();
+        for (Employee emp : employees) {
+            Log.i("onResume: ", emp.getEmployeeName() + " date: " + emp.getDate());
+        }
+        arrayAdapter.clear();
+        String name;
+        ArrayList<String> newValues = new ArrayList<>();
+        for (Employee emps : employees) {
+
+            name = emps.getEmployeeName();
+
+            newValues.add(name);
+
+        }
+        arrayAdapter.addAll(newValues);
+        arrayAdapter.notifyDataSetChanged();
+
+        super.onResume();
     }
 }
