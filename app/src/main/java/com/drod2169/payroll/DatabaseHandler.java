@@ -42,17 +42,7 @@ class DatabaseHandler extends SQLiteOpenHelper {
 
     public int id;
 
-    private ArrayList<String> dates;
-    private ArrayList<String> clockIns;
-    private ArrayList<String> clockOuts;
-    private ArrayList<Double> hoursWorked;
-
     private Gson gson = new Gson();
-
-    private String dateInputString;
-    private String clockInInputString;
-    private String clockOutInputString;
-    private String hoursWorkedGson;
 
 
     //private static final String[] ALL_KEYS = new String[]{KEY_ID, KEY_NAME, KEY_PAY_RATE, KEY_DATE, KEY_CLOCK_IN, KEY_CLOCK_OUT, KEY_HOURS};
@@ -99,16 +89,16 @@ class DatabaseHandler extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        dates = employee.getDate();
-        clockIns = employee.getClockIn();
-        clockOuts = employee.getClockOut();
-        hoursWorked = employee.getWorkedHours();
+        ArrayList<String> dates = employee.getDate();
+        ArrayList<String> clockIns = employee.getClockIn();
+        ArrayList<String> clockOuts = employee.getClockOut();
+        ArrayList<Double> hoursWorked = employee.getWorkedHours();
 
 
-        dateInputString = gson.toJson(dates);
-        clockInInputString = gson.toJson(clockIns);
-        clockOutInputString = gson.toJson(clockOuts);
-        hoursWorkedGson = gson.toJson(hoursWorked);
+        String dateInputString = gson.toJson(dates);
+        String clockInInputString = gson.toJson(clockIns);
+        String clockOutInputString = gson.toJson(clockOuts);
+        String hoursWorkedGson = gson.toJson(hoursWorked);
 
 
         Log.i("Date Input String: ", dateInputString);
@@ -231,9 +221,6 @@ class DatabaseHandler extends SQLiteOpenHelper {
                 ArrayList<String> clockInGsonString = gson.fromJson(mClockIn, type);
                 ArrayList<String> clockOutGsonString = gson.fromJson(mClockOut, type);
                 ArrayList<String> hoursGsonString = gson.fromJson(hours, type);
-                for (String s : hoursGsonString) {
-                    Log.i("gson string ", s);
-                }
 
                 ArrayList<Double> hoursWorkedList = new ArrayList<>();
                 for (String s : hoursGsonString) {
