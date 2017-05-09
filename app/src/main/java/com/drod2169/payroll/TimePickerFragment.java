@@ -23,13 +23,13 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 
     public interface onTimeSelectedListener {
 
-        public void onTimeSelected(String timeSet);
+        void onTimeSelected(String timeSet);
 
-        public void onHourSelected(int mHour);
+        void onHourSelected(int mHour);
 
-        public void onMinuteSelected(int mMin);
+        void onMinuteSelected(int mMin);
 
-        public void onAMPM(String mAmPm);
+        void onAMPM(String mAmPm);
 
     }
 

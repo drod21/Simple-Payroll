@@ -151,7 +151,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        employees = db.getAllEmployees();
+
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                employees = db.getAllEmployees();
+            }
+        };
+        new Thread(runnable).start();
 
         ActionBar actionBar = getActionBar();
 
@@ -246,6 +253,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onResume() {
+
+        // Refresh db
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                employees = db.getAllEmployees();
+            }
+        };
+        new Thread(runnable).start();
+
         super.onResume();
     }
 

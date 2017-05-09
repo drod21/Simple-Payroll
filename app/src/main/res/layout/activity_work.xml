@@ -20,6 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbar"
         android:layout_marginTop="30dp"
+        android:labelFor="@+id/in_date"
         android:inputType="date" />
 
     <Button
@@ -36,6 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/in_date"
+        android:labelFor="@id/in_time"
         android:inputType="time" />
 
     <Button
@@ -52,6 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/in_time"
+        android:labelFor="@id/out_time"
         android:inputType="time" />
 
     <Button

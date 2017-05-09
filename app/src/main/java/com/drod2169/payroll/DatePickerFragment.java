@@ -1,17 +1,13 @@
 package com.drod2169.payroll;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.DatePicker;
 import android.widget.TextView;
-
-import com.google.gson.Gson;
 
 import java.util.Calendar;
 
@@ -29,7 +25,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
     public interface onDateSelectedListener {
 
-        public void onDateSelected(String dateSet);
+        void onDateSelected(String dateSet);
 
     }
 

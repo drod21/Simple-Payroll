@@ -188,6 +188,7 @@ class DatabaseHandler extends SQLiteOpenHelper {
 
     // Get all employees
     List<Employee> getAllEmployees() {
+
         List<Employee> employeeList = new ArrayList<>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_EMPLOYEE;
