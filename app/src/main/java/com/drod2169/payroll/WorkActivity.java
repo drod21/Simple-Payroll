@@ -16,7 +16,6 @@ import android.widget.Toast;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 
 public class WorkActivity extends AppCompatActivity implements View.OnClickListener, DatePickerFragment.onDateSelectedListener, TimePickerFragment.onTimeSelectedListener {
@@ -37,12 +36,9 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
 
     EmployeeSingleton employeeSingleton = EmployeeSingleton.getInstance();
 
-    String dateString;
-
     int hourSelected;
     int minuteSelected;
 
-    String timeString;
     String AMPM;
 
     int h = 0;
@@ -83,16 +79,15 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
         double hour;
         double hoursFinal;
 
-        int hoursTime, minutesTime;
+        int minutesTime;
 
-        hoursTime = getHours();
+        getHours();
         minutesTime = getMinutes();
         Log.i("Hours subtracted: ", String.valueOf(h));
         Log.i("Minutes subtracted: ", String.valueOf(m));
-        Log.i("Hours subtracted new: ", String.valueOf(hoursTime));
         Log.i("Minute subtracted new: ", String.valueOf(minutesTime));
 
-        hour = (double) hoursTime + ((double) minutesTime / 100);
+        hour = (double) h + ((double) minutesTime / 100);
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         hoursFinal = Double.valueOf(decimalFormat.format(hour));
         ArrayList<Double> hours = new ArrayList<>();
@@ -191,18 +186,20 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
 
     public int getMinutes() {
 
-        int t1, t2, t3 = 0;
-
-        t2 = minute.get(1);
+        double t1, t2, t3;
         t1 = minute.get(0);
+        t2 = minute.get(1);
 
         if (t2 < t1 && h != 0) {
             --h;
-            t3 = (t1 - t2) + 60;
-        } else {
-            t3 = t2 - t1;
         }
-        m = t3;
+
+        t3 = (t2 - t1) / 60 * 100;
+        if (t3 < 0) {
+            t3 = Math.abs(t3);
+        }
+
+        m = (int) t3;
 
         return m;
 
@@ -231,41 +228,26 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onDateSelected(String dateSet) {
 
-        dateString = dateSet;
-
         date.add(dateSet);
-        Log.i("date: ", dateString);
-
-        for (String dates : date) {
-            Log.i("Dates: ", String.valueOf(date));
-        }
-
 
         if (employeeSingleton.getDate() == null) {
             employeeSingleton.setDate(date);
         } else {
-            for (String dates : employeeSingleton.getDate()) {
-                if (!Objects.equals(dates, dateSet)) {
+            //for (String dates : employeeSingleton.getDate()) {
+            //if (!Objects.equals(dates, dateSet)) {
                     employeeSingleton.setSingleDate(dateSet);
-                } else {
-                    break;
-                }
-            }
+            //} else {
+            //  break;
+            //}
+            //}
         }
 
         Log.i("Dates from object: ", String.valueOf(employeeSingleton.getDate()));
 
     }
 
-
-    /* TODO: Correctly add times to corresponding employee instead of all times to all employees
-    * TODO: set employee object equal to database employee */
     @Override
     public void onTimeSelected(String timeSet) {
-
-        String test = "";
-        timeString = timeSet;
-        Log.i("Time ", timeString);
 
         TextView tv = (TextView) findViewById(R.id.in_time);
         TextView tv2 = (TextView) findViewById(R.id.out_time);
@@ -297,10 +279,10 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         for (String time : clockIn) {
-            Log.i("Clock In: ", String.valueOf(clockIn));
+            Log.i("Clock In: ", time);
         }
         for (String time : clockOut) {
-            Log.i("Clock Out: ", String.valueOf(clockOut));
+            Log.i("Clock Out: ", time);
         }
 
         Log.i("ClockIn from object: ", String.valueOf(employeeSingleton.getClockIn()));
@@ -326,7 +308,7 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
         minuteSelected = mMinute;
         minute.add(minuteSelected);
         for (int minutes : minute) {
-            Log.i("Hours: ", String.valueOf(minute));
+            Log.i("Minutes: ", String.valueOf(minute));
         }
 
     }
