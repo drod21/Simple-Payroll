@@ -57,13 +57,7 @@ public class EmployeeActivity extends AppCompatActivity {
             empNameText.setText(String.valueOf(employee.getId()));
             empPayRateText.setText(String.valueOf(employee.getPayRate()));
 
-            if (employee.getDate().size() < employee.getClockIn().size()) {
-                for (int j = 0; j < employee.getDate().size(); j++) {
-                    empDateText.setText(employee.getDate().get(j));
-                }
-            } else {
-                empDateText.setText(employee.getDate().get(i));
-            }
+            empDateText.setText(employee.getDate().get(i));
             empClockInText.setText(employee.getClockIn().get(i));
             empClockOutText.setText(employee.getClockOut().get(i));
 
@@ -77,6 +71,20 @@ public class EmployeeActivity extends AppCompatActivity {
 
         }
 
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+
+        employee = TwoFragment.employees.get(empId);
+
+        super.onResume();
 
     }
 }
