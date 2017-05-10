@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static int size;
 
-    EditText name;
+
     EditText payRate;
 
     // Refresh menu item
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void setName(View view) {
 
-        name = (EditText) findViewById(R.id.empName);
+        EditText name = (EditText) findViewById(R.id.empName);
 
         empName = name.getText().toString();
 
@@ -96,8 +96,11 @@ public class MainActivity extends AppCompatActivity {
 
         if (!found) {
 
-            EmployeeSingleton.getInstance().setName(empName);
+            if (EmployeeSingleton.getInstance() != null) {
+                EmployeeSingleton.resetInstance();
+            }
 
+            EmployeeSingleton.getInstance().setName(empName);
             EmployeeSingleton.getInstance().setId(size);
 
             TwoFragment.updateListView(EmployeeSingleton.getInstance().getName());
@@ -117,8 +120,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         //use employeeSingleton
-        employeeSingleton.setPayRate(payHourly);
-        Log.i("Pay rate ", String.valueOf(employeeSingleton.getPayRate()));
+        EmployeeSingleton.getInstance().setPayRate(payHourly);
+        Log.i("Pay rate ", String.valueOf(EmployeeSingleton.getInstance().getPayRate()));
 
     }
 
@@ -253,16 +256,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onResume() {
-
-        // Refresh db
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                employees = db.getAllEmployees();
-            }
-        };
-        new Thread(runnable).start();
-
         super.onResume();
     }
 
