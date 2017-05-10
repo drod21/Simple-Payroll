@@ -211,7 +211,6 @@ class DatabaseHandler extends SQLiteOpenHelper {
                 mDate = (cursor.getString(3));
                 mClockIn = (cursor.getString(4));
                 mClockOut = (cursor.getString(5));
-                //ArrayList<String> hours = new ArrayList<>();
                 hours = (cursor.getString(6));
 
 
@@ -229,18 +228,12 @@ class DatabaseHandler extends SQLiteOpenHelper {
                 }
 
                 try {
+                    // Adding employee to list
                     employee = new EmployeeBuilder().setId(id).setName(name).setRateOfPay(payRate).setDate(dateGsonString).setClockIn(clockInGsonString).setClockOut(clockOutGsonString).setHoursWorked(hoursWorkedList).createEmployee();
                     employeeList.add(employee);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                String log = "Date: " + String.valueOf(dateGsonString) + " , Clock in: " + String.valueOf(clockInGsonString) +
-                        " , Clock out: " + String.valueOf(clockOutGsonString) + " , Hours Worked: " + String.valueOf(hoursWorkedList);
-                Log.i("Json conversion: ", log);
-
-                // Adding employee to list
-
-
             } while (cursor.moveToNext());
         }
 
