@@ -21,6 +21,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import net.danlew.android.joda.JodaTimeAndroid;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +47,68 @@ public class MainActivity extends AppCompatActivity {
     // Refresh menu item
     //private MenuItem refreshMenuItem;
     DatabaseHandler db = new DatabaseHandler(this);
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+
+        // Let's try this
+        /*AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                employees = db.getAllEmployees();
+            }
+        });*/
+
+        // Initialize JodaTime
+        JodaTimeAndroid.init(this);
+
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                employees = db.getAllEmployees();
+            }
+        };
+        new Thread(runnable).start();
+
+        //ActionBar actionBar = getActionBar();
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        setupViewPager(viewPager);
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+
+
+        /*
+        TabTextColor sets the color for the title of the tabs, passing a ColorStateList here makes
+        tab change colors in different situations such as selected, active, inactive etc
+
+        TabIndicatorColor sets the color for the indiactor below the tabs
+         */
+
+        tabLayout.setTabTextColors(ContextCompat.getColorStateList(this, R.color.tab_selector));
+        tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.indicator));
+
+        /*
+        Adding a onPageChangeListener to the viewPager
+        1st we add the PageChangeListener and pass a TabLayoutPageChangeListener so that Tabs Selection
+        changes when a viewpager page changes.
+         */
+        /*try {
+            populateSpinner();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
+    }
 
     public void setName(View view) {
 
@@ -195,66 +259,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         builder.show();
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-
-        // Let's try this
-        /*AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                employees = db.getAllEmployees();
-            }
-        });*/
-
-
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                employees = db.getAllEmployees();
-            }
-        };
-        new Thread(runnable).start();
-
-        //ActionBar actionBar = getActionBar();
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
-
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
-
-
-        /*
-        TabTextColor sets the color for the title of the tabs, passing a ColorStateList here makes
-        tab change colors in different situations such as selected, active, inactive etc
-
-        TabIndicatorColor sets the color for the indiactor below the tabs
-         */
-
-        tabLayout.setTabTextColors(ContextCompat.getColorStateList(this, R.color.tab_selector));
-        tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.indicator));
-
-        /*
-        Adding a onPageChangeListener to the viewPager
-        1st we add the PageChangeListener and pass a TabLayoutPageChangeListener so that Tabs Selection
-        changes when a viewpager page changes.
-         */
-        /*try {
-            populateSpinner();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
     }
 
     private void setupViewPager(ViewPager viewPager) {
