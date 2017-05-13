@@ -59,13 +59,6 @@ public class TwoFragment extends android.support.v4.app.Fragment {
 
             }
 
-        /*ArrayList<String> datesToSort = new ArrayList<>();
-        for (Employee emp : employees) {
-            datesToSort = emp.getDate();
-        }*/
-
-            //Collections.sort(datesToSort);
-
             for (Employee emp : employees) {
                 String log = "Id: " + emp.getId() + " , Name: " + emp.getEmployeeName() + " , Pay Rate: " +
                         emp.getPayRate() + " , Dates: " + emp.getDate() + " , Clock In: " +

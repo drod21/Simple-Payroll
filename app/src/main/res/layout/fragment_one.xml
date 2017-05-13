@@ -10,8 +10,8 @@
         android:text="@string/employee_name"
         android:textSize="18sp"
         android:id="@+id/name"
-        android:layout_marginTop="15dp"
-        android:layout_alignParentTop="true"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/selectEmployee"
         android:layout_alignParentStart="true" />
 
     <EditText
@@ -23,6 +23,13 @@
         android:id="@+id/empName"
         android:layout_below="@+id/name"
         android:layout_alignParentStart="true" />
+
+    <View
+        android:layout_height="2dip"
+        android:background="#FF909090"
+        android:layout_width="wrap_content"
+        android:id="@+id/view"
+        android:layout_below="@+id/setName" />
 
     <TextView
         android:text="@string/name_pay"
@@ -40,7 +47,8 @@
         android:id="@+id/hours_worked"
         android:text="@string/hours"
         android:layout_alignBottom="@+id/hours"
-        android:layout_toEndOf="@+id/name" />
+        android:layout_toEndOf="@+id/name"
+        android:inputType="numberDecimal" />
 
     <Button
         android:layout_height="wrap_content"
@@ -52,15 +60,21 @@
         android:layout_alignParentStart="true"
         android:layout_marginTop="18dp" />
 
+    <View
+        android:layout_height="2dip"
+        android:background="#FF909090"
+        android:layout_width="wrap_content"
+        android:layout_below="@id/hours" />
+
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="text"
+        android:inputType="numberDecimal"
         android:text="@string/pay_rate"
         android:ems="10"
         android:id="@+id/payRate"
-        android:layout_marginTop="11dp"
-        android:layout_below="@+id/setName"
+        android:layout_marginTop="27dp"
+        android:layout_below="@+id/view"
         android:layout_alignParentStart="true" />
 
     <Button
@@ -79,9 +93,9 @@
         android:id="@+id/pay"
         android:textSize="20sp"
         android:text="@string/pay"
+        android:layout_marginTop="15dp"
         android:layout_below="@+id/weekPay"
-        android:layout_alignStart="@+id/weekPay"
-        android:layout_marginTop="40dp" />
+        android:layout_alignStart="@+id/weekPay" />
 
     <Button
         android:id="@+id/setName"
@@ -89,19 +103,42 @@
         android:layout_height="wrap_content"
         android:onClick="setName"
         android:text="@string/set_employee_s_name"
-        android:layout_below="@+id/empName"
-        android:layout_alignEnd="@+id/weekPay"
-        android:layout_marginTop="13dp" />
+        android:layout_alignBottom="@+id/empName"
+        android:layout_toEndOf="@+id/empName" />
 
     <Button
         android:id="@+id/setPay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/payRate"
-        android:layout_marginStart="25dp"
         android:layout_toEndOf="@+id/pay"
         android:onClick="setEmpPayRate"
         android:text="@string/set_pay_rate" />
+
+    <Button
+        android:id="@+id/selectEmployee"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="20dp"
+        android:layout_toStartOf="@+id/setPay"
+        android:onClick="showEmployeeSelector"
+        android:text="Select Employee" />
+
+    <!--<Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView3" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/select_an_employee_from_the_list"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="8dp" />-->
 
 
 </RelativeLayout>

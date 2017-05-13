@@ -17,4 +17,5 @@
     <string name="set_employee_s_name">Set Employee\'s Name</string>
     <string name="set_pay_rate">Set Pay Rate</string>
     <string name="button">Button</string>
+    <string name="select_an_employee_from_the_list">Select an Employee from the list..</string>
 </resources>

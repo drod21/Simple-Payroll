@@ -53,9 +53,51 @@ public class OneFragment extends Fragment {
 
             }
         });
+
+        //DatabaseHandler db = new DatabaseHandler(getContext());
+
+
+
+
+/*
+        Spinner spinner = (Spinner) rootView.findViewById(R.id.spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
+                android.R.layout.simple_spinner_item, empNameList);
+
+
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.i("item", (String) parent.getItemAtPosition(position));
+                String name = (String) parent.getItemAtPosition(position);
+                if (EmployeeSingleton.getInstance() != null) {
+                    EmployeeSingleton.resetInstance();
+                }
+                EmployeeSingleton.getInstance().setName(name);
+
+                EmployeeSingleton.getInstance().setId(employees.get(position).getId());
+                EmployeeSingleton.getInstance().setPayRate(employees.get(position).getPayRate());
+                EmployeeSingleton.getInstance().setDate(employees.get(position).getDate());
+                EmployeeSingleton.getInstance().setClockIn(employees.get(position).getClockIn());
+                EmployeeSingleton.getInstance().setClockOut(employees.get(position).getClockOut());
+                EmployeeSingleton.getInstance().setWorkedHours(employees.get(position).getHoursWorked());
+
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+
+        });*/
         return rootView;
     }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Check which request we're responding to
@@ -83,6 +125,4 @@ public class OneFragment extends Fragment {
         }
 
     }
-
 }
-
