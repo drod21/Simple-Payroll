@@ -1,7 +1,8 @@
 package com.drod2169.payroll;
 
 
-import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -27,13 +28,6 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
-    /* TODO: Create SQL table for storing data
-
-     */
-
-    EmployeeSingleton employeeSingleton = EmployeeSingleton.getInstance();
-    EmployeeSingleton employeeSingleton1 = EmployeeSingleton.getInstance();
-    //EmployeeBuilder employeeBuilder = new EmployeeBuilder();
     private static DecimalFormat df = new DecimalFormat(".##");
 
     static List<Employee> employees = new ArrayList<>();
@@ -46,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     EditText payRate;
+    EditText name;
 
     // Refresh menu item
     //private MenuItem refreshMenuItem;
@@ -53,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void setName(View view) {
 
-        EditText name = (EditText) findViewById(R.id.empName);
+        name = (EditText) findViewById(R.id.empName);
 
         empName = name.getText().toString();
 
@@ -125,6 +120,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void setEmpNameView(String nameEmp) {
+        name = (EditText) findViewById(R.id.empName);
+        name.setText(nameEmp);
+
+    }
+
     public void setPayRateView() {
         payRate = (EditText) findViewById(R.id.payRate);
         payRate.setText(String.valueOf(employees.get(size).getPayRate()));
@@ -134,12 +135,18 @@ public class MainActivity extends AppCompatActivity {
     public void pay(View view) {
 
         Double totalPay;
+        Double totalHours = employees.get(size).getTotalHoursWorked();
+        Double payRate = employees.get(size).getPayRate();
 
-        employees.get(size).setWeekPay(employees.get(size).getTotalHoursWorked(), employees.get(size).getPayRate());
+
         Log.i("Week pay: ", String.valueOf(employees.get(size).getWeekPay()));
-        Log.i("Hours worked: ", String.valueOf(employees.get(size).getTotalHoursWorked()));
-        Log.i("Pay rate: ", String.valueOf(employees.get(size).getPayRate()));
+        Log.i("Hours worked: ", String.valueOf(totalHours));
+        Log.i("Pay rate: ", String.valueOf(payRate));
 
+        //if (totalHours > 40) {
+
+        //}
+        employees.get(size).setWeekPay(totalHours, payRate);
         totalPay = employees.get(size).getWeekPay();
 
         TextView payText = (TextView) findViewById(R.id.pay);
@@ -149,10 +156,60 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void showEmployeeSelector(View view) {
+
+        final List<String> empNameList = new ArrayList<String>();
+        String name;
+
+        for (Employee emp : employees) {
+
+            name = emp.getEmployeeName();
+            empNameList.add(name);
+
+        }
+        final CharSequence names[] = new CharSequence[empNameList.size()];
+
+        for (int i = 0; i < names.length; i++) {
+            names[i] = empNameList.get(i);
+            Log.i("Names ", (String) names[i]);
+        }
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Select Option");
+        builder.setItems(names, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Log.e("value is", "" + which);
+                int i = 0;
+                while (i < names.length) {
+                    Log.i("Selected ", names[which] + " employee");
+                    if (EmployeeSingleton.getInstance() != null) {
+                        EmployeeSingleton.resetInstance();
+                    }
+                    empName = (String) names[which];
+                    setEmpNameView(empName);
+                    findEmployee();
+                    i++;
+                }
+            }
+        });
+        builder.show();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        // Let's try this
+        /*AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                employees = db.getAllEmployees();
+            }
+        });*/
 
 
         Runnable runnable = new Runnable() {
@@ -163,8 +220,7 @@ public class MainActivity extends AppCompatActivity {
         };
         new Thread(runnable).start();
 
-        ActionBar actionBar = getActionBar();
-
+        //ActionBar actionBar = getActionBar();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -194,7 +250,11 @@ public class MainActivity extends AppCompatActivity {
         1st we add the PageChangeListener and pass a TabLayoutPageChangeListener so that Tabs Selection
         changes when a viewpager page changes.
          */
-
+        /*try {
+            populateSpinner();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -256,6 +316,18 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onResume() {
+        try {
+            employees.clear();
+            employees = db.getAllEmployees();
+            Log.i("OnResumeMain ", "Employees updated..");
+            for (Employee emp : employees) {
+
+                Log.i("Employees updated ", emp.getEmployeeName());
+            }
+            Log.i("Employee selected ", employees.get(size).getEmployeeName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         super.onResume();
     }
 
