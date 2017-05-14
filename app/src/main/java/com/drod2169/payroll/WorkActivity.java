@@ -43,15 +43,12 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
 
     int hourSelected;
     int minuteSelected;
-    int daySelected, monthSelected, yearSelected;
     LocalDate mLocalDate;
     LocalTime clockInLocal;
     LocalTime clockOutLocal;
 
     DateTime clockInDateTime = null;
     DateTime clockOutDateTime = null;
-
-    String AMPM;
 
     int h = 0;
     int m = 0;
@@ -61,7 +58,6 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
     ArrayList<String> date = new ArrayList<>();
     ArrayList<Integer> hour = new ArrayList<>();
     ArrayList<Integer> minute = new ArrayList<>();
-    ArrayList<String> timeOfDay = new ArrayList<>();
 
 
     @Override
@@ -265,8 +261,6 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onTimeSelected(String timeSet) {
 
-        LocalTime mClockIn = null;
-        LocalTime mClockOut = null;
         LocalDate clockInDate;
         LocalDate clockOutDate;
 
@@ -281,9 +275,8 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
         if (!clockInTest.isEmpty() && clockOutTest.isEmpty()) {
             clockIn.add(clockInTest);
             int i = clockIn.indexOf(clockInTest);
-            mClockIn = LocalTime.parse(clockInTest);
             clockInDate = mLocalDate;
-            clockInDateTime = clockInDate.toDateTime(mClockIn);
+            clockInDateTime = clockInDate.toDateTime(clockInLocal);
             Log.i("Clock in/date ", clockInDateTime.toString(DateTimeFormat.mediumDateTime()));
 
             Log.i("My format clockin ", dtf.print(clockInDateTime));
@@ -296,11 +289,10 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         if (!clockOutTest.isEmpty()) {
-            mClockOut = LocalTime.parse(clockOutTest);
             clockOut.add(clockOutTest);
             int j = clockOut.indexOf(clockOutTest);
             clockOutDate = mLocalDate;
-            clockOutDateTime = clockOutDate.toDateTime(mClockOut);
+            clockOutDateTime = clockOutDate.toDateTime(clockOutLocal);
             Log.i("Clock out/date ", clockOutDateTime.toString(DateTimeFormat.mediumDateTime()));
             Log.i("My format clockout ", dtf.print(clockOutDateTime));
             if (employeeSingleton.getClockOut() == null) {
@@ -341,16 +333,8 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
         minuteSelected = mMinute;
         minute.add(minuteSelected);
         for (int minutes : minute) {
-            Log.i("Minutes: ", String.valueOf(minute));
+            Log.i("Minutes: ", String.valueOf(minutes));
         }
-
-    }
-
-    @Override
-    public void onAMPM(String mAmPm) {
-
-        AMPM = mAmPm;
-        timeOfDay.add(AMPM);
 
     }
 

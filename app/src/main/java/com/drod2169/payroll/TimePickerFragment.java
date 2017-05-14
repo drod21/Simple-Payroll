@@ -31,8 +31,6 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 
         void onMinuteSelected(int mMin);
 
-        void onAMPM(String mAmPm);
-
         void onClockInSelected(LocalTime localTime);
 
         void onClockOutSelected(LocalTime localTime);
@@ -104,7 +102,6 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         mCallBack.onClockOutSelected(clockOutJoda);
         mCallBack.onHourSelected(hourOfDay);
         mCallBack.onMinuteSelected(minute);
-        mCallBack.onAMPM(AMPM);
 
     }
 
