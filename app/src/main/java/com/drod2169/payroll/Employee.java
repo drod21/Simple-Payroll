@@ -10,22 +10,17 @@ class Employee {
     // TODO: Finish up overtime stuff
 
     private String employeeName;
-    private String dayOfWeek;
-    private String monthOfYear;
-    private String year;
 
     private ArrayList<String> clockIn;
     private ArrayList<String> clockOut;
     private ArrayList<String> date;
 
     private double hours;
-    private double minutes;
     private double weekPay;
     private double payRate;
     private ArrayList<Double> hoursWorked;
     private double totalHoursWorked;
     private double overTimeHours;
-    private double totalPay;
 
     private int id;
 
@@ -82,7 +77,7 @@ class Employee {
     public void setHours(double hours) {
         this.hours += hours;
     }
-    
+
     void setWeekPay() {
 
         double hours = getTotalHoursWorked();

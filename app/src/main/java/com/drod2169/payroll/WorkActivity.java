@@ -270,7 +270,7 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
         LocalDate clockInDate;
         LocalDate clockOutDate;
 
-        DateTimeFormatter dtf = DateTimeFormat.forPattern("MM/dd/yyyy HH:mm:ss");
+        DateTimeFormatter dtf = DateTimeFormat.forPattern("EEEE, MM/dd/yyyy h:mm aa");
 
         TextView tv = (TextView) findViewById(R.id.in_time);
         TextView tv2 = (TextView) findViewById(R.id.out_time);
@@ -284,6 +284,9 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
             mClockIn = LocalTime.parse(clockInTest);
             clockInDate = mLocalDate;
             clockInDateTime = clockInDate.toDateTime(mClockIn);
+            Log.i("Clock in/date ", clockInDateTime.toString(DateTimeFormat.mediumDateTime()));
+
+            Log.i("My format clockin ", dtf.print(clockInDateTime));
 
             if (employeeSingleton.getClockIn() == null) {
                 employeeSingleton.setClockIn(clockIn);
@@ -298,7 +301,8 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
             int j = clockOut.indexOf(clockOutTest);
             clockOutDate = mLocalDate;
             clockOutDateTime = clockOutDate.toDateTime(mClockOut);
-
+            Log.i("Clock out/date ", clockOutDateTime.toString(DateTimeFormat.mediumDateTime()));
+            Log.i("My format clockout ", dtf.print(clockOutDateTime));
             if (employeeSingleton.getClockOut() == null) {
                 employeeSingleton.setClockOut(clockOut);
             } else {
@@ -307,8 +311,6 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
 
         }
 
-        Log.i("Clock in/date ", String.valueOf(dtf.print(clockInDateTime)));
-        Log.i("Clock out/date ", String.valueOf(dtf.print(clockOutDateTime)));
         for (String time : clockIn) {
             Log.i("Clock In: ", time);
         }

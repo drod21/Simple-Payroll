@@ -3,7 +3,7 @@ package com.drod2169.payroll;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class EmployeeBuilder {
+class EmployeeBuilder {
 
     // TODO: Change employee date and clock in/clock out to Joda time objects
     // TODO: Finish up overtime stuff
@@ -30,7 +30,7 @@ public class EmployeeBuilder {
         return this;
     }
 
-    public EmployeeBuilder setRateOfPay(double rateOfPay) {
+    EmployeeBuilder setRateOfPay(double rateOfPay) {
         this.rateOfPay = rateOfPay;
         return this;
     }
@@ -40,17 +40,17 @@ public class EmployeeBuilder {
         return this;
     }
 
-    public EmployeeBuilder setClockIn(ArrayList<String> clockIn) {
+    EmployeeBuilder setClockIn(ArrayList<String> clockIn) {
         this.clockIn = clockIn;
         return this;
     }
 
-    public EmployeeBuilder setClockOut(ArrayList<String> clockOut) {
+    EmployeeBuilder setClockOut(ArrayList<String> clockOut) {
         this.clockOut = clockOut;
         return this;
     }
 
-    public EmployeeBuilder setHoursWorked(ArrayList<Double> hoursWorked) {
+    EmployeeBuilder setHoursWorked(ArrayList<Double> hoursWorked) {
         this.hoursWorked = hoursWorked;
         return this;
     }
@@ -91,7 +91,7 @@ public class EmployeeBuilder {
         this.totalHoursWorked = totalHoursWorked;
     }
 
-    public Employee createEmployee() {
+    Employee createEmployee() {
         return new Employee(id, name, rateOfPay, date, clockIn, clockOut, hoursWorked);
     }
 
