@@ -3,14 +3,11 @@ package com.drod2169.payroll;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-/**
- * Created by derekrodriguez on 2/18/17.
- */
 
-public class Employee {
+class Employee {
 
-    /* TODO: Possibly need to get rid of ArrayLists... Explore options */
-
+    // TODO: Change employee date and clock in/clock out to Joda time objects
+    // TODO: Finish up overtime stuff
 
     private String employeeName;
     private String dayOfWeek;
@@ -77,93 +74,20 @@ public class Employee {
 
     // Mutators
 
-    public void setID(int id) {
-
-        this.id = id;
-
-    }
-
-    public void setDayOfWeek(String dayOfWeek) {
-
-        this.dayOfWeek = dayOfWeek;
-
-    }
-
-    public void setMonthOfYear(String monthOfYear) {
-
-        this.monthOfYear = monthOfYear;
-
-    }
-
-    public void setYear(String year) {
-
-        this.year = year;
-
-    }
-
-    public void setEmployeeName(String employeeName) {
-
-        this.employeeName = employeeName;
-
-    }
-
-    public void setHoursWorked(ArrayList<Double> hoursWorked) {
-
-        this.hoursWorked = hoursWorked;
-
-    }
-
-    public void setPayRate(double payRate) {
-
-        this.payRate = payRate;
-
-    }
-
-    public void setSingleDate(String date) {
-        this.date.add(date);
-    }
-
 
     public void setDate(ArrayList<String> date) {
         this.date = date;
     }
 
-    public void setClockOut(ArrayList<String> clockOut) {
-        this.clockOut = clockOut;
-    }
-
-    public void setSingleClockOut(String clockOut) {
-        this.clockOut.add(clockOut);
-    }
-
-    public void setSingleClockIn(String clockIn) {
-        this.clockIn.add(clockIn);
-    }
-    public void setClockIn(ArrayList<String> clockIn) {
-        this.clockIn = clockIn;
-    }
-
-    public void setMinutes(double minutes) {
-        this.minutes += minutes;
-    }
-
     public void setHours(double hours) {
         this.hours += hours;
     }
+    
+    void setWeekPay() {
 
-    public void setTotalHoursWorked(double totalHoursWorked) {
-        this.totalHoursWorked = totalHoursWorked;
-    }
+        double hours = getTotalHoursWorked();
 
-    public void setOverTimeHours(double overTimeHours) {
-        this.overTimeHours = overTimeHours;
-    }
-
-    public void setWeekPay(double hours, double rate) {
-
-        hours = getTotalHoursWorked();
-
-        rate = getPayRate();
+        double rate = getPayRate();
 
         this.weekPay = hours * rate;
 
@@ -179,50 +103,28 @@ public class Employee {
 
     }
 
-    public double getWeekPay() {
+    double getWeekPay() {
 
         return this.weekPay;
 
     }
 
-    public String getDayOfWeek() {
-
-        return this.dayOfWeek;
-
-    }
-
-    public String getMonthOfYear() {
-
-        return this.monthOfYear;
-
-    }
-
-    public String getYear() {
-
-        return this.year;
-
-    }
-
-    public String getEmployeeName() {
+    String getEmployeeName() {
 
         return this.employeeName;
 
     }
 
-    public ArrayList<Double> getHoursWorked() {
+    ArrayList<Double> getHoursWorked() {
 
         return this.hoursWorked;
 
     }
 
-    public double getPayRate() {
+    double getPayRate() {
 
         return this.payRate;
 
-    }
-
-    public double getMinutes() {
-        return this.minutes;
     }
 
 

@@ -10,6 +10,8 @@ import java.util.ArrayList;
  */
 
 public class EmployeeSingleton extends Application {
+    // TODO: Change employee date and clock in/clock out to Joda time objects
+    // TODO: Finish up overtime stuff
 
     private int id;
     private String name;

@@ -11,6 +11,8 @@ import android.text.format.DateFormat;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import org.joda.time.LocalTime;
+
 import java.util.Calendar;
 
 
@@ -21,7 +23,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 
     onTimeSelectedListener mCallBack;
 
-    public interface onTimeSelectedListener {
+    interface onTimeSelectedListener {
 
         void onTimeSelected(String timeSet);
 
@@ -30,6 +32,10 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         void onMinuteSelected(int mMin);
 
         void onAMPM(String mAmPm);
+
+        void onClockInSelected(LocalTime localTime);
+
+        void onClockOutSelected(LocalTime localTime);
 
     }
 
@@ -49,8 +55,6 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         final Calendar c = Calendar.getInstance();
         int hour = c.get(Calendar.HOUR_OF_DAY);
         int minute = c.get(Calendar.MINUTE);
-
-
 
         //Create and return a new instance of TimePickerDialog
         return new TimePickerDialog(getActivity(), this, hour, minute,
@@ -75,22 +79,29 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         //Display the user changed time on TextView
 
 
-        String hourString = hourOfDay > 11 ? String.valueOf(hourOfDay - 12) : "" + hourOfDay;
+        //String hourString = hourOfDay > 11 ? String.valueOf(hourOfDay - 12) : "" + hourOfDay;
+        String hourString = String.valueOf(hourOfDay);
         String minuteString = minute < 10 ? "0" + minute : "" + minute;
 
-        time = hourString + ":" + minuteString + " " + AMPM;
+        time = hourString + ":" + minuteString;
 
         clockIn = tv.getText().toString();
         clockOut = tv2.getText().toString();
+        LocalTime clockInJoda = null;
+        LocalTime clockOutJoda = null;
 
         if (TextUtils.isEmpty(clockIn)) {
-            tv.setText(time);
+            clockInJoda = LocalTime.parse(time);
+            tv.setText(String.valueOf(clockInJoda));
         } else {
-            tv2.setText(time);
+            clockOutJoda = LocalTime.parse(time);
+            tv2.setText(String.valueOf(clockOutJoda));
         }
 
 
         mCallBack.onTimeSelected(time);
+        mCallBack.onClockInSelected(clockInJoda);
+        mCallBack.onClockOutSelected(clockOutJoda);
         mCallBack.onHourSelected(hourOfDay);
         mCallBack.onMinuteSelected(minute);
         mCallBack.onAMPM(AMPM);

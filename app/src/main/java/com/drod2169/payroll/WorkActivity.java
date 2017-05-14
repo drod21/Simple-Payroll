@@ -13,6 +13,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import net.danlew.android.joda.JodaTimeAndroid;
+
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +33,6 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
      */
     //SharedPreferences sharedPreferences;
 
-    /* TODO: Create SQL table for storing data
-       TODO: Pass date back to OneFragment
-     */
 
     DatabaseHandler db = new DatabaseHandler(this);
 
@@ -38,6 +43,13 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
 
     int hourSelected;
     int minuteSelected;
+    int daySelected, monthSelected, yearSelected;
+    LocalDate mLocalDate;
+    LocalTime clockInLocal;
+    LocalTime clockOutLocal;
+
+    DateTime clockInDateTime = null;
+    DateTime clockOutDateTime = null;
 
     String AMPM;
 
@@ -73,7 +85,11 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        // Initialize JodaTime
+        JodaTimeAndroid.init(this);
+
     }
+
 
     public void getHoursFinal() {
         double hour;
@@ -108,29 +124,29 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
 
     public void addToDb() {
 
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
 
-                    try {
-                        db.addEmployee(employeeSingleton);
-                        Log.i("Reading: ", "Reading all employees..");
-                        List<Employee> employees = db.getAllEmployees();
-                        for (Employee emp : employees) {
-                            String log = "Id: " + emp.getId() + " , Name: " + emp.getEmployeeName() + " , Pay Rate: " +
-                                    emp.getPayRate() + " , Dates: " + emp.getDate() + " , Clock In: " +
-                                    emp.getClockIn() + " , Clock Out: " + emp.getClockOut() + " , Hours Worked: " + emp.getHoursWorked();
-                            //MainActivity.employee.setID(emp.getId());
-                            // Write to the log
-                            Log.i("DB from WorkActivity ", log);
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                try {
+                    db.addEmployee(employeeSingleton);
+                    Log.i("Reading: ", "Reading all employees..");
+                    List<Employee> employees = db.getAllEmployees();
+                    for (Employee emp : employees) {
+                        String log = "Id: " + emp.getId() + " , Name: " + emp.getEmployeeName() + " , Pay Rate: " +
+                                emp.getPayRate() + " , Dates: " + emp.getDate() + " , Clock In: " +
+                                emp.getClockIn() + " , Clock Out: " + emp.getClockOut() + " , Hours Worked: " + emp.getHoursWorked();
+                        //MainActivity.employee.setID(emp.getId());
+                        // Write to the log
+                        Log.i("DB from WorkActivity ", log);
                     }
-
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
 
-            }).start();
+            }
+
+        }).start();
 
     }
 
@@ -224,6 +240,10 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    @Override
+    public void onLocalDateSelected(LocalDate localDate) {
+        mLocalDate = localDate;
+    }
 
     @Override
     public void onDateSelected(String dateSet) {
@@ -233,14 +253,10 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
         if (employeeSingleton.getDate() == null) {
             employeeSingleton.setDate(date);
         } else {
-            //for (String dates : employeeSingleton.getDate()) {
-            //if (!Objects.equals(dates, dateSet)) {
-                    employeeSingleton.setSingleDate(dateSet);
-            //} else {
-            //  break;
-            //}
-            //}
+            employeeSingleton.setSingleDate(dateSet);
         }
+
+        // Log.i("Dates from joda ", String.valueOf(dateSelected));
 
         Log.i("Dates from object: ", String.valueOf(employeeSingleton.getDate()));
 
@@ -248,6 +264,13 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onTimeSelected(String timeSet) {
+
+        LocalTime mClockIn = null;
+        LocalTime mClockOut = null;
+        LocalDate clockInDate;
+        LocalDate clockOutDate;
+
+        DateTimeFormatter dtf = DateTimeFormat.forPattern("MM/dd/yyyy HH:mm:ss");
 
         TextView tv = (TextView) findViewById(R.id.in_time);
         TextView tv2 = (TextView) findViewById(R.id.out_time);
@@ -258,6 +281,9 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
         if (!clockInTest.isEmpty() && clockOutTest.isEmpty()) {
             clockIn.add(clockInTest);
             int i = clockIn.indexOf(clockInTest);
+            mClockIn = LocalTime.parse(clockInTest);
+            clockInDate = mLocalDate;
+            clockInDateTime = clockInDate.toDateTime(mClockIn);
 
             if (employeeSingleton.getClockIn() == null) {
                 employeeSingleton.setClockIn(clockIn);
@@ -267,8 +293,11 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         if (!clockOutTest.isEmpty()) {
+            mClockOut = LocalTime.parse(clockOutTest);
             clockOut.add(clockOutTest);
             int j = clockOut.indexOf(clockOutTest);
+            clockOutDate = mLocalDate;
+            clockOutDateTime = clockOutDate.toDateTime(mClockOut);
 
             if (employeeSingleton.getClockOut() == null) {
                 employeeSingleton.setClockOut(clockOut);
@@ -278,6 +307,8 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
 
         }
 
+        Log.i("Clock in/date ", String.valueOf(dtf.print(clockInDateTime)));
+        Log.i("Clock out/date ", String.valueOf(dtf.print(clockOutDateTime)));
         for (String time : clockIn) {
             Log.i("Clock In: ", time);
         }
@@ -321,5 +352,13 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    @Override
+    public void onClockInSelected(LocalTime localTime) {
+        clockInLocal = localTime;
+    }
 
+    @Override
+    public void onClockOutSelected(LocalTime localTime) {
+        clockOutLocal = localTime;
+    }
 }

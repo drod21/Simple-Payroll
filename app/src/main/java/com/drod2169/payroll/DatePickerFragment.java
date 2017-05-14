@@ -4,10 +4,11 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.DatePicker;
 import android.widget.TextView;
+
+import org.joda.time.LocalDate;
 
 import java.util.Calendar;
 
@@ -16,7 +17,6 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
     onDateSelectedListener mCallBack;
     String stringOfDate;
 
-    Bundle date = new Bundle();
 
     // Required empty constructor
     public DatePickerFragment() {
@@ -26,6 +26,8 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
     public interface onDateSelectedListener {
 
         void onDateSelected(String dateSet);
+
+        void onLocalDateSelected(LocalDate date);
 
     }
 
@@ -62,21 +64,14 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         editor.putString("year", String.valueOf(year));
         editor.commit();*/
 
-        date.putInt("day", day);
-        date.putInt("month", month);
-        date.putInt("year", year);
-
-        Intent intent = getActivity().getIntent();
-        intent.putExtras(date);
-
-
-
 
         stringOfDate = (month + 1) + "/" + day + "/" + year;
         tv.setText(stringOfDate);
+        LocalDate dateSelected = new LocalDate(year, (month + 1), day);
 
 
         mCallBack.onDateSelected(stringOfDate);
+        mCallBack.onLocalDateSelected(dateSelected);
     }
 
     @Override

@@ -21,8 +21,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import net.danlew.android.joda.JodaTimeAndroid;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,8 +60,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });*/
 
-        // Initialize JodaTime
-        JodaTimeAndroid.init(this);
 
         Runnable runnable = new Runnable() {
             @Override
@@ -210,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
         //if (totalHours > 40) {
 
         //}
-        employees.get(size).setWeekPay(totalHours, payRate);
+        employees.get(size).setWeekPay();
         totalPay = employees.get(size).getWeekPay();
 
         TextView payText = (TextView) findViewById(R.id.pay);
