@@ -143,9 +143,11 @@ public class MainActivity extends AppCompatActivity {
             EmployeeSingleton.getInstance().setId(employees.get(size).getId());
             EmployeeSingleton.getInstance().setName(employees.get(size).getEmployeeName());
             EmployeeSingleton.getInstance().setPayRate(employees.get(size).getPayRate());
-            EmployeeSingleton.getInstance().setDate(employees.get(size).getDate());
-            EmployeeSingleton.getInstance().setClockIn(employees.get(size).getClockIn());
-            EmployeeSingleton.getInstance().setClockOut(employees.get(size).getClockOut());
+            EmployeeSingleton.getInstance().setClockedInDate(employees.get(size).getClockedInDate());
+            EmployeeSingleton.getInstance().setClockedOutDate(employees.get(size).getClockedOutDate());
+            //EmployeeSingleton.getInstance().setDate(employees.get(size).getDate());
+            //EmployeeSingleton.getInstance().setClockIn(employees.get(size).getClockIn());
+            //EmployeeSingleton.getInstance().setClockOut(employees.get(size).getClockOut());
             EmployeeSingleton.getInstance().setWorkedHours(employees.get(size).getHoursWorked());
         }
 
@@ -203,11 +205,16 @@ public class MainActivity extends AppCompatActivity {
         Log.i("Hours worked: ", String.valueOf(totalHours));
         Log.i("Pay rate: ", String.valueOf(payRate));
 
-        //if (totalHours > 40) {
+        if (totalHours <= 40.00) {
+            employees.get(size).setWeekPay();
+            totalPay = employees.get(size).getWeekPay();
 
-        //}
-        employees.get(size).setWeekPay();
-        totalPay = employees.get(size).getWeekPay();
+        } else {
+
+            employees.get(size).getOverTimeHours();
+            employees.get(size).setWeekPay();
+            totalPay = employees.get(size).getWeekPay();
+        }
 
         TextView payText = (TextView) findViewById(R.id.pay);
         payText.setText(String.format("$%s", String.valueOf(df.format(totalPay))));
@@ -317,14 +324,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         try {
-            employees.clear();
-            employees = db.getAllEmployees();
-            Log.i("OnResumeMain ", "Employees updated..");
-            for (Employee emp : employees) {
+            if (employees.size() > 0) {
+                employees.clear();
+                employees = db.getAllEmployees();
+                Log.i("OnResumeMain ", "Employees updated..");
+                for (Employee emp : employees) {
 
-                Log.i("Employees updated ", emp.getEmployeeName());
+                    Log.i("Employees updated ", emp.getEmployeeName());
+                }
             }
-            Log.i("Employee selected ", employees.get(size).getEmployeeName());
         } catch (Exception e) {
             e.printStackTrace();
         }

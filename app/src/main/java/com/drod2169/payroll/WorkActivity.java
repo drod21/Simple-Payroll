@@ -55,6 +55,8 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
 
     ArrayList<String> clockIn = new ArrayList<>();
     ArrayList<String> clockOut = new ArrayList<>();
+    ArrayList<DateTime> clockedIn = new ArrayList<>();
+    ArrayList<DateTime> clockedOut = new ArrayList<>();
     ArrayList<String> date = new ArrayList<>();
     ArrayList<Integer> hour = new ArrayList<>();
     ArrayList<Integer> minute = new ArrayList<>();
@@ -112,6 +114,20 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
             EmployeeSingleton.getInstance().setSingleWorkedHours(hoursFinal);
         }
 
+        Employee employee = new EmployeeBuilder()
+                .setId(EmployeeSingleton.getInstance().getId())
+                .setName(EmployeeSingleton.getInstance().getName())
+                .setRateOfPay(EmployeeSingleton.getInstance().getPayRate())
+                .setClockedInDate(clockedIn)
+                .setClockedOutDate(clockedOut)
+                .setHoursWorked(hours)
+                .createEmployeeTest();
+
+        String log = "ID: " + employee.getId() + " Name: " + employee.getEmployeeName() + " Pay: " + employee.getPayRate() + " Clocked in: " + employee.getClockedInDate() + " Clocked out: " + employee.getClockedOutDate()
+                + " Hours worked: " + employee.getHoursWorked();
+        Log.i("Employee with joda ", log);
+
+
         Intent output = new Intent();
         output.putExtra(OneFragment.hour_key, hoursFinal);
         setResult(RESULT_OK, output);
@@ -130,8 +146,8 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
                     List<Employee> employees = db.getAllEmployees();
                     for (Employee emp : employees) {
                         String log = "Id: " + emp.getId() + " , Name: " + emp.getEmployeeName() + " , Pay Rate: " +
-                                emp.getPayRate() + " , Dates: " + emp.getDate() + " , Clock In: " +
-                                emp.getClockIn() + " , Clock Out: " + emp.getClockOut() + " , Hours Worked: " + emp.getHoursWorked();
+                                emp.getPayRate() + " , Clock In: " +
+                                emp.getClockedInDate() + " , Clock Out: " + emp.getClockedOutDate() + " , Hours Worked: " + emp.getHoursWorked();
                         //MainActivity.employee.setID(emp.getId());
                         // Write to the log
                         Log.i("DB from WorkActivity ", log);
@@ -264,7 +280,7 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
         LocalDate clockInDate;
         LocalDate clockOutDate;
 
-        DateTimeFormatter dtf = DateTimeFormat.forPattern("EEEE, MM/dd/yyyy h:mm aa");
+        DateTimeFormatter dtf = DateTimeFormat.forPattern("EE, MM/dd/yyyy h:mm aa");
 
         TextView tv = (TextView) findViewById(R.id.in_time);
         TextView tv2 = (TextView) findViewById(R.id.out_time);
@@ -273,11 +289,63 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
         String clockOutTest = tv2.getText().toString();
 
         if (!clockInTest.isEmpty() && clockOutTest.isEmpty()) {
+
             clockIn.add(clockInTest);
             int i = clockIn.indexOf(clockInTest);
+
+            clockInDate = mLocalDate;
+            LocalTime clIn = LocalTime.parse(clockInTest);
+            clockInDateTime = clockInDate.toDateTime(clIn);
+            clockedIn.add(clockInDateTime);
+
+            Log.i("Clock in/date ", clockInDateTime.toString(DateTimeFormat.mediumDateTime()));
+
+            Log.i("My format clockin ", dtf.print(clockInDateTime));
+            Log.i("Clockin Array ", String.valueOf(clockedIn));
+
+            if (employeeSingleton.getClockIn() == null) {
+                employeeSingleton.setClockIn(clockIn);
+                employeeSingleton.setClockedInDate(clockedIn);
+            } else {
+                employeeSingleton.setSingleClockedInDate(clockInDateTime);
+                employeeSingleton.setSingleClockIn(clockIn.get(i));
+            }
+        }
+
+        if (!clockOutTest.isEmpty()) {
+
+            clockOut.add(clockOutTest);
+            int j = clockOut.indexOf(clockOutTest);
+
+            clockOutDate = mLocalDate;
+            LocalTime clOut = LocalTime.parse(clockOutTest);
+            clockOutDateTime = clockOutDate.toDateTime(clOut);
+            clockedOut.add(clockOutDateTime);
+            Log.i("Clockout Array ", String.valueOf(clockedOut));
+
+            Log.i("Clock out/date ", clockOutDateTime.toString(DateTimeFormat.mediumDateTime()));
+            Log.i("My format clockout ", dtf.print(clockOutDateTime));
+
+            if (employeeSingleton.getClockOut() == null) {
+                employeeSingleton.setClockOut(clockOut);
+                employeeSingleton.setClockedOutDate(clockedOut);
+            } else {
+                employeeSingleton.setSingleClockOut(clockOut.get(j));
+                employeeSingleton.setSingleClockedOutDate(clockOutDateTime);
+            }
+
+        }
+
+        /*
+        if (!clockInTest.isEmpty() && clockOutTest.isEmpty()) {
+
             clockInDate = mLocalDate;
             clockInDateTime = clockInDate.toDateTime(clockInLocal);
-            Log.i("Clock in/date ", clockInDateTime.toString(DateTimeFormat.mediumDateTime()));
+            String clockInJoda = clockInDateTime.toString(DateTimeFormat.mediumDateTime());
+            clockedIn.add(clockInDateTime);
+            clockIn.add(clockInJoda);
+            int i = clockIn.indexOf(clockInJoda);
+            Log.i("Clock in/date ", clockInJoda);
 
             Log.i("My format clockin ", dtf.print(clockInDateTime));
 
@@ -289,19 +357,24 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         if (!clockOutTest.isEmpty()) {
-            clockOut.add(clockOutTest);
-            int j = clockOut.indexOf(clockOutTest);
+
+
             clockOutDate = mLocalDate;
             clockOutDateTime = clockOutDate.toDateTime(clockOutLocal);
-            Log.i("Clock out/date ", clockOutDateTime.toString(DateTimeFormat.mediumDateTime()));
+            clockedOut.add(clockOutDateTime);
+            String clockOutJoda = clockOutDateTime.toString(DateTimeFormat.mediumDateTime());
+            clockOut.add(clockOutJoda);
+            int j = clockOut.indexOf(clockOutJoda);
+            Log.i("Clock out/date ", clockOutJoda);
             Log.i("My format clockout ", dtf.print(clockOutDateTime));
+
             if (employeeSingleton.getClockOut() == null) {
                 employeeSingleton.setClockOut(clockOut);
             } else {
                 employeeSingleton.setSingleClockOut(clockOut.get(j));
             }
 
-        }
+        }*/
 
         for (String time : clockIn) {
             Log.i("Clock In: ", time);
@@ -339,12 +412,14 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onClockInSelected(LocalTime localTime) {
-        clockInLocal = localTime;
+    public void onClockInSelected(LocalTime clockInTest) {
+        clockInLocal = clockInTest;
+        Log.i("ClockInLocal ", String.valueOf(clockInLocal));
     }
 
     @Override
-    public void onClockOutSelected(LocalTime localTime) {
-        clockOutLocal = localTime;
+    public void onClockOutSelected(LocalTime clockOutTest) {
+        clockOutLocal = clockOutTest;
+        Log.i("ClockOutLocal ", String.valueOf(clockOutLocal));
     }
 }

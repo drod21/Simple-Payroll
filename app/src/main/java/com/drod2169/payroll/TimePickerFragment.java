@@ -31,9 +31,9 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 
         void onMinuteSelected(int mMin);
 
-        void onClockInSelected(LocalTime localTime);
+        void onClockInSelected(LocalTime clockInTest);
 
-        void onClockOutSelected(LocalTime localTime);
+        void onClockOutSelected(LocalTime clockOutTest);
 
     }
 

@@ -9,6 +9,9 @@ import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 public class EmployeeActivity extends AppCompatActivity {
 
     /* TODO: Switch to table view for better viewing. */
@@ -43,12 +46,13 @@ public class EmployeeActivity extends AppCompatActivity {
         }
 
         String totalHrsMsg = "Total hours: " + String.valueOf(employee.getTotalHoursWorked());
+        DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("EE, MM/dd/yyyy h:mm aa");
 
-        for (int i = 0; i < employee.getClockIn().size() && i < employee.getClockOut().size(); i++) {
+        for (int i = 0; i < employee.getClockedInDate().size() && i < employee.getClockedOutDate().size(); i++) {
             View tableRow = LayoutInflater.from(this).inflate(R.layout.table_item, tableLayout, false);
             TextView empNameText = (TextView) tableRow.findViewById(R.id.emp_name_list);
             TextView empPayRateText = (TextView) tableRow.findViewById(R.id.emp_pay_rate_list);
-            TextView empDateText = (TextView) tableRow.findViewById(R.id.emp_date_list);
+            //TextView empDateText = (TextView) tableRow.findViewById(R.id.emp_date_list);
             TextView empClockInText = (TextView) tableRow.findViewById(R.id.emp_clock_in_list);
             TextView empClockOutText = (TextView) tableRow.findViewById(R.id.emp_clock_out_list);
             TextView empHoursText = (TextView) tableRow.findViewById(R.id.emp_hours_list);
@@ -57,9 +61,9 @@ public class EmployeeActivity extends AppCompatActivity {
             empNameText.setText(String.valueOf(employee.getId()));
             empPayRateText.setText(String.valueOf(employee.getPayRate()));
 
-            empDateText.setText(employee.getDate().get(i));
-            empClockInText.setText(employee.getClockIn().get(i));
-            empClockOutText.setText(employee.getClockOut().get(i));
+            //empDateText.setText(employee.getDate().get(i));
+            empClockInText.setText(dateTimeFormatter.print(employee.getClockedInDate().get(i)));
+            empClockOutText.setText(dateTimeFormatter.print(employee.getClockedOutDate().get(i)));
 
             empHoursText.setText(String.valueOf(employee.getHoursWorked().get(i)));
 

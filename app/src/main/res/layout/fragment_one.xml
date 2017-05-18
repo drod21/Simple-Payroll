@@ -15,14 +15,14 @@
         android:layout_alignParentStart="true" />
 
     <EditText
+        android:id="@+id/empName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="@string/name_ph"
-        android:ems="10"
-        android:id="@+id/empName"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/name"
-        android:layout_alignParentStart="true" />
+        android:ems="10"
+        android:hint="@string/name_ph"
+        android:inputType="textPersonName" />
 
     <View
         android:layout_height="2dip"
@@ -42,12 +42,12 @@
         android:layout_alignParentStart="true" />
 
     <EditText
+        android:id="@+id/hours_worked"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/hours_worked"
-        android:text="@string/hours"
         android:layout_alignBottom="@+id/hours"
         android:layout_toEndOf="@+id/name"
+        android:hint="@string/hours"
         android:inputType="numberDecimal" />
 
     <Button
@@ -67,15 +67,15 @@
         android:layout_below="@id/hours" />
 
     <EditText
+        android:id="@+id/payRate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
-        android:text="@string/pay_rate"
-        android:ems="10"
-        android:id="@+id/payRate"
-        android:layout_marginTop="27dp"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/view"
-        android:layout_alignParentStart="true" />
+        android:layout_marginTop="27dp"
+        android:ems="10"
+        android:hint="@string/pay_rate"
+        android:inputType="numberDecimal" />
 
     <Button
         android:text="@string/weekpay"

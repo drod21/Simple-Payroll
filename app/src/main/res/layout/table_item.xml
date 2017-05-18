@@ -66,13 +66,13 @@
         android:gravity="center"
         android:text="Pay Rate" />
 
-    <TextView
+    <!--<TextView
         android:id="@+id/emp_date_list"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.25"
         android:gravity="center"
-        android:text="Dates Worked" />
+        android:text="Dates Worked" />-->
 
     <TextView
         android:id="@+id/emp_clock_in_list"

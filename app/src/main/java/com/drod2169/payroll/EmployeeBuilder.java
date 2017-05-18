@@ -1,12 +1,13 @@
 package com.drod2169.payroll;
 
+import org.joda.time.DateTime;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 class EmployeeBuilder {
 
     // TODO: Change employee date and clock in/clock out to Joda time objects
-    // TODO: Finish up overtime stuff
 
     private int id;
     private String name;
@@ -16,9 +17,14 @@ class EmployeeBuilder {
     private ArrayList<String> clockOut;
     private ArrayList<Double> hoursWorked;
     private double totalHoursWorked;
+    private double overTimeHours;
     private String date0;
     private String clockIn0;
     private String clockOut0;
+
+
+    private ArrayList<DateTime> clockedInDate = new ArrayList<>();
+    private ArrayList<DateTime> clockedOutDate = new ArrayList<>();
 
     public EmployeeBuilder setId(int id) {
         this.id = id;
@@ -75,6 +81,18 @@ class EmployeeBuilder {
         return this;
     }
 
+    public double getOverTimeHours() {
+        if (totalHoursWorked > 40.0) {
+            overTimeHours = totalHoursWorked - 40;
+        }
+        return overTimeHours;
+    }
+
+    public EmployeeBuilder setOverTimeHours(double overTimeHours) {
+        this.overTimeHours = overTimeHours;
+        return this;
+    }
+
     public double getTotalHoursWorked() {
         Double totalHr = 0.0;
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
@@ -87,8 +105,43 @@ class EmployeeBuilder {
         return totalHoursWorked;
     }
 
-    public void setTotalHoursWorked(double totalHoursWorked) {
+    public EmployeeBuilder setTotalHoursWorked(double totalHoursWorked) {
         this.totalHoursWorked = totalHoursWorked;
+        return this;
+    }
+
+
+    public ArrayList<DateTime> getClockedInDate() {
+        return clockedInDate;
+    }
+
+    public EmployeeBuilder setClockedInDate(ArrayList<DateTime> clockedInDate) {
+        this.clockedInDate = clockedInDate;
+        return this;
+
+    }
+
+    public EmployeeBuilder setSingleClockedInDate(DateTime clockedInDate) {
+        this.clockedInDate.add(clockedInDate);
+        return this;
+    }
+
+    public ArrayList<DateTime> getClockedOutDate() {
+        return clockedOutDate;
+    }
+
+    public EmployeeBuilder setClockedOutDate(ArrayList<DateTime> clockedOutDate) {
+        this.clockedOutDate = clockedOutDate;
+        return this;
+    }
+
+    public EmployeeBuilder setSingleClockedOutDate(DateTime clockedOutDate) {
+        this.clockedOutDate.add(clockedOutDate);
+        return this;
+    }
+
+    Employee createEmployeeTest() {
+        return new Employee(id, name, rateOfPay, clockedInDate, clockedOutDate, hoursWorked);
     }
 
     Employee createEmployee() {

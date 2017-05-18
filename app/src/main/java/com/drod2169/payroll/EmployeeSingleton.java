@@ -2,6 +2,8 @@ package com.drod2169.payroll;
 
 import android.app.Application;
 
+import org.joda.time.DateTime;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -11,7 +13,6 @@ import java.util.ArrayList;
 
 public class EmployeeSingleton extends Application {
     // TODO: Change employee date and clock in/clock out to Joda time objects
-    // TODO: Finish up overtime stuff
 
     private int id;
     private String name;
@@ -22,6 +23,8 @@ public class EmployeeSingleton extends Application {
     private ArrayList<Double> workedHours;
     private double totalHours;
     private double overTimeHours;
+    private ArrayList<DateTime> clockedInDate;
+    private ArrayList<DateTime> clockedOutDate;
 
     private static volatile EmployeeSingleton instance;
 
@@ -119,23 +122,47 @@ public class EmployeeSingleton extends Application {
         Double totalHr = 0.0;
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         for (double hour : workedHours) {
-            if (this.totalHours <= 40.0) {
-                totalHr += Double.valueOf(decimalFormat.format(hour));
-            } else if (this.totalHours > 40.0) {
                 totalHr += Double.valueOf(decimalFormat.format(hour));
             }
-        }
-
         this.totalHours = Double.valueOf(decimalFormat.format(totalHr));
 
         return totalHours;
     }
 
     public double getOverTimeHours() {
+        if (totalHours > 40.0) {
+            overTimeHours = totalHours - 40;
+        }
         return overTimeHours;
     }
 
     public void setOverTimeHours(double overTimeHours) {
+
         this.overTimeHours = overTimeHours;
+    }
+
+    public ArrayList<DateTime> getClockedInDate() {
+        return clockedInDate;
+    }
+
+    public void setClockedInDate(ArrayList<DateTime> clockedInDate) {
+        this.clockedInDate = clockedInDate;
+
+    }
+
+    public void setSingleClockedInDate(DateTime clockedInDate) {
+        this.clockedInDate.add(clockedInDate);
+    }
+
+    public ArrayList<DateTime> getClockedOutDate() {
+        return clockedOutDate;
+    }
+
+    public void setClockedOutDate(ArrayList<DateTime> clockedOutDate) {
+        this.clockedOutDate = clockedOutDate;
+    }
+
+    public void setSingleClockedOutDate(DateTime clockedOutDate) {
+        this.clockedOutDate.add(clockedOutDate);
     }
 }

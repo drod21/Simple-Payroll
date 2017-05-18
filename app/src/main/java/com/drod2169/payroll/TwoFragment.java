@@ -60,9 +60,14 @@ public class TwoFragment extends android.support.v4.app.Fragment {
             }
 
             for (Employee emp : employees) {
-                String log = "Id: " + emp.getId() + " , Name: " + emp.getEmployeeName() + " , Pay Rate: " +
+                /*String log = "Id: " + emp.getId() + " , Name: " + emp.getEmployeeName() + " , Pay Rate: " +
                         emp.getPayRate() + " , Dates: " + emp.getDate() + " , Clock In: " +
-                        emp.getClockIn() + " , Clock Out: " + emp.getClockOut() + " , Hours Worked: " + emp.getHoursWorked();
+                        emp.getClockedInDate() + " , Clock Out: " + emp.getClockedOutDate() + " , Hours Worked: " + emp.getHoursWorked();
+                */
+                String log = "Id: " + emp.getId() + " , Name: " + emp.getEmployeeName() + " , Pay Rate: " +
+                        emp.getPayRate() + " , Clock In: " + emp.getClockedInDate() + " , Clock Out: " +
+                        emp.getClockedOutDate() + " , Hours Worked: " + emp.getHoursWorked();
+
                 //MainActivity.employee.setID(emp.getId());
                 // Write to the log
                 Log.i("DB from TwoFrag: ", log);
@@ -156,7 +161,7 @@ public class TwoFragment extends android.support.v4.app.Fragment {
     public void onResume() {
         employees = (ArrayList<Employee>) databaseHandler.getAllEmployees();
         for (Employee emp : employees) {
-            Log.i("onResume: ", emp.getEmployeeName() + " date: " + emp.getDate());
+            Log.i("onResume: ", emp.getEmployeeName() + " id: " + emp.getId());
         }
         arrayAdapter.clear();
         String name;
