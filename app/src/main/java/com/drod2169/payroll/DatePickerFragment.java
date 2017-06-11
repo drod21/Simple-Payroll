@@ -23,12 +23,8 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
     }
 
-    public interface onDateSelectedListener {
-
-        void onDateSelected(String dateSet);
-
+    interface onDateSelectedListener {
         void onLocalDateSelected(LocalDate date);
-
     }
 
 
@@ -70,7 +66,6 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         LocalDate dateSelected = new LocalDate(year, (month + 1), day);
 
 
-        mCallBack.onDateSelected(stringOfDate);
         mCallBack.onLocalDateSelected(dateSelected);
     }
 
