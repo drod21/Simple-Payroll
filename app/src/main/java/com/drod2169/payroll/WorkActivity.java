@@ -18,8 +18,6 @@ import net.danlew.android.joda.JodaTimeAndroid;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -258,29 +256,10 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onDateSelected(String dateSet) {
-
-        date.add(dateSet);
-
-        if (employeeSingleton.getDate() == null) {
-            employeeSingleton.setDate(date);
-        } else {
-            employeeSingleton.setSingleDate(dateSet);
-        }
-
-        // Log.i("Dates from joda ", String.valueOf(dateSelected));
-
-        Log.i("Dates from object: ", String.valueOf(employeeSingleton.getDate()));
-
-    }
-
-    @Override
     public void onTimeSelected(String timeSet) {
 
         LocalDate clockInDate;
         LocalDate clockOutDate;
-
-        DateTimeFormatter dtf = DateTimeFormat.forPattern("EE, MM/dd/yyyy h:mm aa");
 
         TextView tv = (TextView) findViewById(R.id.in_time);
         TextView tv2 = (TextView) findViewById(R.id.out_time);
@@ -289,126 +268,46 @@ public class WorkActivity extends AppCompatActivity implements View.OnClickListe
         String clockOutTest = tv2.getText().toString();
 
         if (!clockInTest.isEmpty() && clockOutTest.isEmpty()) {
-
-            clockIn.add(clockInTest);
-            int i = clockIn.indexOf(clockInTest);
-
             clockInDate = mLocalDate;
             LocalTime clIn = LocalTime.parse(clockInTest);
             clockInDateTime = clockInDate.toDateTime(clIn);
             clockedIn.add(clockInDateTime);
 
-            Log.i("Clock in/date ", clockInDateTime.toString(DateTimeFormat.mediumDateTime()));
-
-            Log.i("My format clockin ", dtf.print(clockInDateTime));
-            Log.i("Clockin Array ", String.valueOf(clockedIn));
-
-            if (employeeSingleton.getClockIn() == null) {
-                employeeSingleton.setClockIn(clockIn);
+            if (employeeSingleton.getClockedInDate() == null) {
                 employeeSingleton.setClockedInDate(clockedIn);
             } else {
                 employeeSingleton.setSingleClockedInDate(clockInDateTime);
-                employeeSingleton.setSingleClockIn(clockIn.get(i));
             }
         }
 
         if (!clockOutTest.isEmpty()) {
-
-            clockOut.add(clockOutTest);
-            int j = clockOut.indexOf(clockOutTest);
-
             clockOutDate = mLocalDate;
             LocalTime clOut = LocalTime.parse(clockOutTest);
             clockOutDateTime = clockOutDate.toDateTime(clOut);
             clockedOut.add(clockOutDateTime);
-            Log.i("Clockout Array ", String.valueOf(clockedOut));
 
-            Log.i("Clock out/date ", clockOutDateTime.toString(DateTimeFormat.mediumDateTime()));
-            Log.i("My format clockout ", dtf.print(clockOutDateTime));
-
-            if (employeeSingleton.getClockOut() == null) {
-                employeeSingleton.setClockOut(clockOut);
+            if (employeeSingleton.getClockedOutDate() == null) {
                 employeeSingleton.setClockedOutDate(clockedOut);
             } else {
-                employeeSingleton.setSingleClockOut(clockOut.get(j));
                 employeeSingleton.setSingleClockedOutDate(clockOutDateTime);
             }
 
         }
-
-        /*
-        if (!clockInTest.isEmpty() && clockOutTest.isEmpty()) {
-
-            clockInDate = mLocalDate;
-            clockInDateTime = clockInDate.toDateTime(clockInLocal);
-            String clockInJoda = clockInDateTime.toString(DateTimeFormat.mediumDateTime());
-            clockedIn.add(clockInDateTime);
-            clockIn.add(clockInJoda);
-            int i = clockIn.indexOf(clockInJoda);
-            Log.i("Clock in/date ", clockInJoda);
-
-            Log.i("My format clockin ", dtf.print(clockInDateTime));
-
-            if (employeeSingleton.getClockIn() == null) {
-                employeeSingleton.setClockIn(clockIn);
-            } else {
-                employeeSingleton.setSingleClockIn(clockIn.get(i));
-            }
-        }
-
-        if (!clockOutTest.isEmpty()) {
-
-
-            clockOutDate = mLocalDate;
-            clockOutDateTime = clockOutDate.toDateTime(clockOutLocal);
-            clockedOut.add(clockOutDateTime);
-            String clockOutJoda = clockOutDateTime.toString(DateTimeFormat.mediumDateTime());
-            clockOut.add(clockOutJoda);
-            int j = clockOut.indexOf(clockOutJoda);
-            Log.i("Clock out/date ", clockOutJoda);
-            Log.i("My format clockout ", dtf.print(clockOutDateTime));
-
-            if (employeeSingleton.getClockOut() == null) {
-                employeeSingleton.setClockOut(clockOut);
-            } else {
-                employeeSingleton.setSingleClockOut(clockOut.get(j));
-            }
-
-        }*/
-
-        for (String time : clockIn) {
-            Log.i("Clock In: ", time);
-        }
-        for (String time : clockOut) {
-            Log.i("Clock Out: ", time);
-        }
-
-        Log.i("ClockIn from object: ", String.valueOf(employeeSingleton.getClockIn()));
-        Log.i("ClockOut from object: ", String.valueOf(employeeSingleton.getClockOut()));
+        Log.i("ClockIn from object: ", String.valueOf(employeeSingleton.getClockedInDate()));
+        Log.i("ClockOut from object: ", String.valueOf(employeeSingleton.getClockedOutDate()));
 
     }
 
     @Override
     public void onHourSelected(int mHour) {
-
         hourSelected = mHour;
         hour.add(hourSelected);
-        for (int hours : hour) {
-            Log.i("Hours: ", String.valueOf(hour));
-        }
-
-
     }
 
     @Override
     public void onMinuteSelected(int mMinute) {
-
         minuteSelected = mMinute;
         minute.add(minuteSelected);
-        for (int minutes : minute) {
-            Log.i("Minutes: ", String.valueOf(minutes));
-        }
-
     }
 
     @Override
